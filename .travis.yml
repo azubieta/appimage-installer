@@ -1,12 +1,16 @@
-language: generic
+language: cpp
+compiler: gcc
+
 
 notifications:
   email: false
 
 addons:
   apt:
-  - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+    sources:
+      - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
     packages:
+      - realpath
       - git
       - wget
       - cmake
@@ -16,6 +20,7 @@ addons:
       - libglib2.0-dev
       - libarchive-dev
       - libfuse-dev
+      - liblzma-dev
       - qt510base
       - qt510xmlpatterns
       - qt510x11extras
@@ -24,13 +29,13 @@ addons:
 install: .travis/install_libappimage_from_sources.sh
 script:
   - /opt/qt510/bin/qt510-env.sh
-  - .travis/build_appimage.sh
+  - QT5_INSTALL_PREFIX=/opt/qt510 LIBAPPIMAGE_INSTALL_PREFIX=/tmp/libappimage_prefix .travis/build_appimage.sh
 
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
   file_glob: true
-  file: AppImage_CLI*
+  file: build/AppImage_CLI*.AppImage
   skip_cleanup: true
   prerelease: true
   overwrite: true

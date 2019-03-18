@@ -1,0 +1,40 @@
+language: generic
+
+notifications:
+  email: false
+
+addons:
+  apt:
+  - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
+    packages:
+      - git
+      - wget
+      - cmake
+      - desktop-file-utils
+      - librsvg2-bin
+      - libcairo2-dev
+      - libglib2.0-dev
+      - libarchive-dev
+      - libfuse-dev
+      - qt510base
+      - qt510xmlpatterns
+      - qt510x11extras
+      - qt510svg
+
+install: .travis/install_libappimage_from_sources.sh
+script:
+  - /opt/qt510/bin/qt510-env.sh
+  - .travis/build_appimage.sh
+
+deploy:
+  provider: releases
+  api_key: "$GITHUB_TOKEN"
+  file_glob: true
+  file: AppImage_CLI*
+  skip_cleanup: true
+  prerelease: true
+  overwrite: true
+  on:
+    repo: azubieta/appimage-user-tools
+    branch: master
+    tags: true

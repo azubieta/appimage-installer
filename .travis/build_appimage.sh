@@ -12,8 +12,6 @@ SOURCES_DIR=`realpath $0`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 
-mkdir /tmp/appimage-user-tools; cd /tmp/appimage-user-tools
-
 cmake ${SOURCES_DIR} -DCMAKE_INSTALL_PREFIX=/usr -Dlibappimage_DIR=${LIBAPPIMAGE_INSTALL_PREFIX}/lib/cmake/libappimage
 make -j`nproc` install DESTDIR=AppDir
 
@@ -24,4 +22,4 @@ chmod +x linuxdeploy-*
 
 export LD_LIBRARY_PATH=${QT5_INSTALL_PREFIX}/lib:${LIBAPPIMAGE_INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}
 
- ./linuxdeploy-x86_64.AppImage --appdir=AppDir --plugin qt --output appimage
+./linuxdeploy-x86_64.AppImage --appdir=AppDir --plugin qt --output appimage

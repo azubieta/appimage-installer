@@ -1,7 +1,7 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=AppImage CLI
+Name=Appimage User Tool
 Comment=Manage AppImages on your system
 TryExec=app
 Exec=app %F

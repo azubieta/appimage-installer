@@ -25,17 +25,23 @@ addons:
       - qt510xmlpatterns
       - qt510x11extras
       - qt510svg
+env:
+  - QT5_INSTALL_PREFIX=/opt/qt510
+  - LIBAPPIMAGE_INSTALL_PREFIX=/tmp/libappimage_prefix
+  - PROJECT_BUILD_DIR=/tmp/build
+
 
 install: .travis/install_libappimage_from_sources.sh
 script:
   - /opt/qt510/bin/qt510-env.sh
-  - QT5_INSTALL_PREFIX=/opt/qt510 LIBAPPIMAGE_INSTALL_PREFIX=/tmp/libappimage_prefix .travis/build_appimage.sh
+  - mkdir -p ${PROJECT_BUILD_DIR}
+  - cd ${PROJECT_BUILD_DIR}; .travis/build_appimage.sh
 
 deploy:
   provider: releases
   api_key: "$GITHUB_TOKEN"
   file_glob: true
-  file: build/AppImage_CLI*.AppImage
+  file: Appimage_User_Tool*.AppImage
   skip_cleanup: true
   prerelease: true
   overwrite: true

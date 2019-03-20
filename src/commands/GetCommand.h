@@ -3,6 +3,8 @@
 // libraries
 #include <QObject>
 #include <QString>
+#include <Attica/ProviderManager>
+#include <Attica/ListJob>
 
 // local
 #include <Command.h>
@@ -20,26 +22,32 @@ public slots:
     void execute() override;
 
 protected slots:
-    void handleGetApplicationCompleted(QVariantMap app);
-
     void handleDownloadProgress(qint64 progress, qint64 total, const QString &message);
 
     void handleDownloadCompleted();
 
     void handleDownloadFailed(const QString& message);
 
+    void handleAtticaProviderAdded(const Attica::Provider& provider);
+
+    void getDownloadLink();
+
+    void handleGetDownloadLinkJobFinished(Attica::BaseJob* job);
+
+    void handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error) {
+        emit Command::executionFailed("Unable to connect to " + provider.toString());
+    }
+
 private:
     void createApplicationsDir();
 
-    QString buildTargetPath(const Application& a);
+    QString buildTargetPath(const QString& contentId);
 
-    void downloadFile(const Application& application);
-
-    bool isCompatibleBinary(QString arch);
+    Attica::ProviderManager providerManager;
+    Attica::Provider provider;
 
     FileDownload *fileDownload;
     QString appId;
     QString targetPath;
-    Explorer explorer;
     QTextStream out;
 };

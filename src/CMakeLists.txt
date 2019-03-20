@@ -1,5 +1,7 @@
 include(utils.cmake)
 
+find_package(KF5Attica)
+
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
@@ -25,6 +27,7 @@ target_link_libraries(
     app
     PRIVATE Qt5::Core
     PRIVATE Qt5::Network
+    PRIVATE KF5::Attica
     PRIVATE libappimage
 )
 

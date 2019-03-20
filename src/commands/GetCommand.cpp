@@ -5,85 +5,27 @@ extern "C" {
 
 // libraries
 #include <QDir>
+#include <Attica/ItemJob>
+#include <Attica/GetJob>
+#include <Attica/Content>
+#include <Attica/DownloadItem>
 #include <appimage/desktop_integration/IntegrationManager.h>
 
 // local
 #include <gateways/FileDownload.h>
 #include "GetCommand.h"
 
-GetCommand::GetCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId),
-                                                                explorer("http://apps.nxos.org/api"), out(stdout) {
+GetCommand::GetCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout) {
 
-    connect(&explorer, &Explorer::getApplicationCompleted, this, &GetCommand::handleGetApplicationCompleted,
-            Qt::QueuedConnection);
+    connect(&providerManager, &Attica::ProviderManager::providerAdded, this,
+            &GetCommand::handleAtticaProviderAdded);
+
+    connect(&providerManager, &Attica::ProviderManager::failedToLoad, this,
+            &GetCommand::handleAtticaFailedToLoad);
 }
 
 void GetCommand::execute() {
-    explorer.getApplication(appId + ".desktop");
-}
-
-void GetCommand::handleGetApplicationCompleted(QVariantMap app) {
-    if (app.empty()) {
-        emit Command::executionFailed("Application not found: " + appId);
-        return;
-    }
-
-    auto releases = app.value("releases").toList();
-    if (releases.empty()) {
-        emit Command::executionFailed("No compatible releases found for: " + appId);
-        return;
-    }
-
-    // find latest release
-    QVariantMap latestRelease = releases.first().toMap();
-    for (const auto& itr: releases) {
-        auto map = itr.toMap();
-
-        auto version = map.value("version", "latest").toString();
-        if (latestRelease.value("version") < map.value("version"))
-            latestRelease = map;
-    }
-
-
-    // find binary for the current arch
-    QVariantMap file;
-    for (const auto& itr: latestRelease.value("files").toList()) {
-        auto map = itr.toMap();
-        if (isCompatibleBinary(map.value("architecture").toString())) {
-            file = map;
-            break;
-        }
-    }
-
-    if (file.empty()) {
-        emit Command::executionFailed("No binaries releases found for: " + QSysInfo::currentCpuArchitecture());
-        return;
-    }
-
-    Application a(latestRelease.value("id").toString(), latestRelease.value("version", "latest").toString());
-    a.setArch(file.value("architecture").toString());
-    a.setDownloadUrl(file.value("url").toString());
-
-    createApplicationsDir();
-    downloadFile(a);
-}
-
-bool GetCommand::isCompatibleBinary(QString arch) {
-    auto normalArch = arch.replace('-', '_');
-    return normalArch == QSysInfo::currentCpuArchitecture();
-}
-
-void GetCommand::downloadFile(const Application& application) {
-    targetPath = buildTargetPath(application);
-    fileDownload = new FileDownload(application.getDownloadUrl(), targetPath, this);
-    fileDownload->setProgressNotificationsEnabled(true);
-
-    connect(fileDownload, &Download::progress, this, &GetCommand::handleDownloadProgress, Qt::QueuedConnection);
-    connect(fileDownload, &Download::completed, this, &GetCommand::handleDownloadCompleted);
-    connect(fileDownload, &Download::stopped, this, &GetCommand::handleDownloadFailed);
-
-    out << "Getting " << appId << " from " << application.getDownloadUrl() << "\n";
-    fileDownload->start();
+    providerManager.addProviderFile(QUrl("https://appimagehub.com/ocs/providers.xml"));
 }
 
 void GetCommand::createApplicationsDir() {
@@ -91,12 +33,11 @@ void GetCommand::createApplicationsDir() {
     home.mkdir("Applications");
 }
 
-QString GetCommand::buildTargetPath(const Application& a) {
-    return QDir::homePath() + "/Applications/" +
-           a.getCodeName() + "-" + a.getVersion() + "-" + a.getArch() + ".AppImage";
+QString GetCommand::buildTargetPath(const QString& contentId) {
+    return QDir::homePath() + "/Applications/" + contentId + ".AppImage";
 }
 
-void GetCommand::handleDownloadProgress(qint64 progress, qint64 total, const QString &message) {
+void GetCommand::handleDownloadProgress(qint64 progress, qint64 total, const QString& message) {
     // Draw nice [==   ] progress bar
     out << message;
     // clear spaces in the right
@@ -137,4 +78,43 @@ void GetCommand::handleDownloadFailed(const QString& message) {
     fileDownload->deleteLater();
 
     emit executionFailed(message);
+}
+
+void GetCommand::getDownloadLink() {
+    auto getDownloadLinkJob = provider.downloadLink(appId);
+    connect(getDownloadLinkJob, &Attica::BaseJob::finished, this, &GetCommand::handleGetDownloadLinkJobFinished);
+
+    getDownloadLinkJob->start();
+}
+
+void GetCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
+    auto* downloadLinkJob = dynamic_cast<Attica::ItemJob<Attica::DownloadItem>*>(job);
+    if (downloadLinkJob) {
+        Attica::DownloadItem contents = downloadLinkJob->result();
+        downloadLinkJob->deleteLater();
+
+        if (contents.url().isEmpty()) {
+            emit executionFailed("Unable to find a download for " + appId);
+        } else {
+            createApplicationsDir();
+
+            targetPath = buildTargetPath(appId);
+            fileDownload = new FileDownload(contents.url().toString(), targetPath, this);
+            fileDownload->setProgressNotificationsEnabled(true);
+
+            connect(fileDownload, &Download::progress, this, &GetCommand::handleDownloadProgress, Qt::QueuedConnection);
+            connect(fileDownload, &Download::completed, this, &GetCommand::handleDownloadCompleted);
+            connect(fileDownload, &Download::stopped, this, &GetCommand::handleDownloadFailed);
+
+            out << "Getting " << appId << " from " << contents.url().toString() << "\n";
+            fileDownload->start();
+        }
+    } else
+        emit executionFailed("Unable to resolve the application download link.");
+}
+
+void GetCommand::handleAtticaProviderAdded(const Attica::Provider& provider) {
+    GetCommand::provider = provider;
+
+    getDownloadLink();
 }

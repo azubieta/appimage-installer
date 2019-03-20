@@ -1,5 +1,9 @@
 #pragma once
 
+// libraries
+#include <QNetworkReply>
+#include <Attica/ProviderManager>
+
 // local
 #include <Command.h>
 #include <entities/Explorer.h>
@@ -10,13 +14,28 @@ public:
     explicit SearchCommand(const QString& query);
 
 public slots:
+
     void execute() override;
 
 protected slots:
-    void handleSearchCompleted(QList<QVariantMap> apps);
+
+    void handleAtticaProviderAdded(const Attica::Provider& provider);
+
+    void handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error);
+
+    void handleListCategoriesJobFinished(Attica::BaseJob* job);
+
+    void handleSearchContentsJobFinished(Attica::BaseJob* job);
+
 
 protected:
-    Explorer explorer;
+    void loadCategories();
+
+    void doSearch(QList<Attica::Category> categories);
+
+    Attica::ProviderManager providerManagers;
+    Attica::Provider provider;
+
     QString query;
 
     QStringList applicationsIds;

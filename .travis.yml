@@ -21,6 +21,7 @@ addons:
       - libarchive-dev
       - libfuse-dev
       - liblzma-dev
+      - libkf5attica-dev
       - qt510base
       - qt510xmlpatterns
       - qt510x11extras

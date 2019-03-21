@@ -36,15 +36,9 @@ script:
   - mkdir -p ${PROJECT_BUILD_DIR}
   - cd ${PROJECT_BUILD_DIR}; ${SOURCES_DIR}/.travis/build_appimage.sh
 
-deploy:
-  provider: releases
-  api_key: "$GITHUB_TOKEN"
-  file_glob: true
-  file: ${PROJECT_BUILD_DIR}/Appimage_User_Tool*.AppImage
-  skip_cleanup: true
-  prerelease: true
-  overwrite: true
-  on:
-    repo: azubieta/appimage-user-tools
-    branch: master
-    tags: true
+after_success:
+  - ls -lh
+  # make sure only pushes to rewrite create a new release, otherwise pretend PR and upload to transfer.sh
+  - if [ "$TRAVIS_BRANCH" != "$TRAVIS_TAG" ] && [ "$TRAVIS_BRANCH" != "master" ]; then export TRAVIS_EVENT_TYPE=pull_request; fi
+  - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+  - bash upload.sh AppImage_User_Tool-"$ARCH".AppImage*

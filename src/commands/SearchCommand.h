@@ -6,7 +6,6 @@
 
 // local
 #include <Command.h>
-#include <entities/Explorer.h>
 
 class SearchCommand : public Command {
 Q_OBJECT

@@ -13,7 +13,6 @@ add_executable(
     app
     main.cpp
     Command.h
-    entities/Explorer.cpp
     entities/Application.cpp
     gateways/FileDownload.cpp
     gateways/Download.cpp

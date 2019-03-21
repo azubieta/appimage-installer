@@ -8,8 +8,6 @@
 
 // local
 #include <Command.h>
-#include <entities/Explorer.h>
-#include <entities/Application.h>
 
 class FileDownload;
 

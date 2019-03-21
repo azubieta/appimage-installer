@@ -2,29 +2,25 @@
 #include <QDir>
 #include <QDebug>
 #include <QTextStream>
-#include <appimage/core/exceptions.h>
-#include <appimage/utils/ResourcesExtractor.h>
+#include <appimage/appimage.h>
 
 // local
-#include "entities/Application.h"
 #include "ListCommand.h"
 
 void ListCommand::execute() {
     auto appImages = listAppImages();
 
-    QList<Application> applications;
+    QList<QPair<QString, QString>> applications;
     for (const auto& appImage: appImages) {
-        try {
-            appimage::utils::ResourcesExtractor extractor(appImage);
-            QString id = QString::fromStdString(extractor.getDesktopEntryPath()).remove(".desktop");
-            Application app(id, "latest");
-            app.setDownloadUrl(QString::fromStdString(appImage.getPath()));
-
-            applications << app;
-        } catch (const appimage::core::AppImageError& error) {
-            qWarning() << QString::fromStdString(error.what());
+        char** fileList = appimage_list_files(appImage.toStdString().c_str());
+        for (char** itr = fileList; *itr != nullptr; itr++) {
+            QString path = *itr;
+            if (path.endsWith(".desktop") && !path.contains('/')) {
+                applications << QPair<QString, QString>(path.remove(".desktop"), appImage);
+            }
         }
 
+        appimage_string_list_free(fileList);
     }
 
 
@@ -33,29 +29,34 @@ void ListCommand::execute() {
     if (applications.empty())
         out << "There is any known AppImage in your system.\n";
     else {
-        out << "Downloaded AppImages:\n";
+        int maxNameLenght = 0;
+        for (const auto& application: applications)
+            if (application.first.size() > maxNameLenght)
+                maxNameLenght = application.first.size();
+
         for (const auto& application: applications) {
-            out << '\n' << application.getCodeName() << '\n';
-            out << '\t' << application.getDownloadUrl() << '\n';
+            out << application.first;
+            for (int i = 0; i < (maxNameLenght - application.first.size()); i++)
+                out << " ";
+
+            out << "  " << application.second << '\n';
         }
     }
     emit Command::executionCompleted();
 }
 
-QList<appimage::core::AppImage> ListCommand::listAppImages() {
-    QList<appimage::core::AppImage> list;
+QList<QString> ListCommand::listAppImages() {
+    QList<QString> list;
     QDir dir(QDir::homePath() + "/Applications");
 
     auto candidates = dir.entryList({}, QDir::Files);
     for (const auto& candidate: candidates) {
-        try {
-            appimage::core::AppImage appImage(dir.filePath(candidate).toStdString());
-            list << appImage;
-        } catch (const appimage::core::AppImageError& error) {
-            qWarning() << QString::fromStdString(error.what()) << " " << dir.filePath(candidate);
-        }
-
+        auto fullPath = dir.filePath(candidate).toLocal8Bit();
+        int type = appimage_get_type(fullPath, false);
+        if (type != -1)
+            list << fullPath;
     }
 
     return list;
 }
+

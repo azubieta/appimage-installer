@@ -2,7 +2,6 @@
 
 // libraries
 #include "Command.h"
-#include <appimage/core/AppImage.h>
 
 class RemoveCommand : public Command {
 Q_OBJECT
@@ -15,6 +14,6 @@ public slots:
 private:
     QString appId;
 
-    QList<appimage::core::AppImage> listAppImages();
+    QList<QString> listAppImages();
 };
 

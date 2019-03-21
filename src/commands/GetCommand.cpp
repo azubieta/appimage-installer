@@ -9,7 +9,7 @@ extern "C" {
 #include <Attica/GetJob>
 #include <Attica/Content>
 #include <Attica/DownloadItem>
-#include <appimage/desktop_integration/IntegrationManager.h>
+#include <appimage/appimage.h>
 
 // local
 #include <gateways/FileDownload.h>
@@ -41,7 +41,7 @@ void GetCommand::handleDownloadProgress(qint64 progress, qint64 total, const QSt
     // Draw nice [==   ] progress bar
     out << message;
     // clear spaces in the right
-    struct winsize size;
+    struct winsize size = {0x0};
     ioctl(1, TIOCGWINSZ, &size);
     for (int i = 0; i < size.ws_col - message.size(); i++)
         out << " ";
@@ -58,15 +58,8 @@ void GetCommand::handleDownloadCompleted() {
     targetFile.setPermissions(permissions | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
 
     // integrate with the desktop environment
-    try {
-        appimage::core::AppImage appImage(targetPath.toStdString());
+    appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
-        appimage::desktop_integration::IntegrationManager integrationManager;
-        integrationManager.registerAppImage(appImage);
-        integrationManager.generateThumbnails(appImage);
-    } catch (const appimage::core::AppImageError& error) {
-        qWarning() << "AppImage integration failed: " << QString::fromStdString(error.what());
-    }
     fileDownload->deleteLater();
 
     emit Command::executionCompleted();

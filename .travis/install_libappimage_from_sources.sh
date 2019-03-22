@@ -2,13 +2,24 @@
 
 set -ex
 
-export LIBAPPIMAGE_INSTALL_PREFIX=/tmp/libappimage_prefix
+if [ -z "${INSTALL_PREFIX}" ]; then
+    echo "Missing INSTALL_PREFIX";
+    exit 1;
+fi
+
 LIBAPPIMAGE_SOURCE_DIR=/tmp/libappimage_source
+LIBAPPIMAGE_BUILD_DIR=/tmp/libappimage_build
 
 git clone https://github.com/AppImage/libappimage.git --depth=1 ${LIBAPPIMAGE_SOURCE_DIR}
 git -C ${LIBAPPIMAGE_SOURCE_DIR} submodule update --init --recursive;
 
-mkdir -p /tmp/libappimage_source; cd /tmp/libappimage_source
-cmake ${LIBAPPIMAGE_SOURCE_DIR} -DCMAKE_INSTALL_PREFIX=${LIBAPPIMAGE_INSTALL_PREFIX} -DBUILD_TESTING=OFF -DUSE_SYSTEM_LIBARCHIVE=ON -DUSE_SYSTEM_XZ=ON
+mkdir -p ${LIBAPPIMAGE_BUILD_DIR}; cd ${LIBAPPIMAGE_BUILD_DIR}
+cmake ${LIBAPPIMAGE_SOURCE_DIR} \
+    -DBUILD_TESTING=OFF \
+    -DUSE_SYSTEM_LIBARCHIVE=ON \
+    -DUSE_SYSTEM_XZ=ON\
+    -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
+    -DCMAKE_BUILD_TYPE=Release
+
 make -j`nproc` install
 

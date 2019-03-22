@@ -27,10 +27,13 @@ addons:
       - qt510x11extras
       - qt510svg
 env:
-  - QT5_INSTALL_PREFIX=/opt/qt510 LIBAPPIMAGE_INSTALL_PREFIX=/tmp/libappimage_prefix PROJECT_BUILD_DIR=/tmp/build
+  - QT5_INSTALL_PREFIX=/opt/qt510 INSTALL_PREFIX=/tmp/dist PROJECT_BUILD_DIR=/tmp/build
 
 
-install: .travis/install_libappimage_from_sources.sh
+install:
+  - .travis/install_ecm_from_sources.sh
+  - .travis/install_kf5attica_from_sources.sh
+  - .travis/install_libappimage_from_sources.sh
 script:
   - /opt/qt510/bin/qt510-env.sh
   - export SOURCES_DIR=${PWD}

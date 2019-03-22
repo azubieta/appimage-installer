@@ -21,5 +21,5 @@ cmake ${LIBAPPIMAGE_SOURCE_DIR} \
     -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
     -DCMAKE_BUILD_TYPE=Release
 
-make -j`nproc` install
+sudo make -j`nproc` install
 

@@ -15,6 +15,6 @@ git -C ${ECM_SOURCE_DIR} submodule update --init --recursive;
 
 mkdir -p ${ECM_BUILD_DIR}; cd ${ECM_BUILD_DIR}
 cmake ${ECM_SOURCE_DIR} -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} -DCMAKE_BUILD_TYPE=Release
-make -j`nproc` install
+sudo make -j`nproc` install
 
 

@@ -19,5 +19,5 @@ cmake ${ATTICA_SOURCE_DIR} \
     -DCMAKE_BUILD_TYPE=Release \
     -Decm_DIR=${INSTALL_PREFIX}/share/ECM/cmake
 
-make -j`nproc` install
+sudo make -j`nproc` install
 

@@ -21,13 +21,12 @@ addons:
       - libarchive-dev
       - libfuse-dev
       - liblzma-dev
-      - libkf5attica-dev
       - qt510base
       - qt510xmlpatterns
       - qt510x11extras
       - qt510svg
 env:
-  - QT5_INSTALL_PREFIX=/opt/qt510 INSTALL_PREFIX=/tmp/dist PROJECT_BUILD_DIR=/tmp/build
+  - QT5_INSTALL_PREFIX=/opt/qt510 INSTALL_PREFIX=/usr PROJECT_BUILD_DIR=/tmp/build
 
 
 install:

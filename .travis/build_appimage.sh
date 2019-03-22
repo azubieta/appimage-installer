@@ -20,6 +20,6 @@ wget -nc https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/
 
 chmod +x linuxdeploy-*
 
-export LD_LIBRARY_PATH=${QT5_INSTALL_PREFIX}/lib:${INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}
+export LD_LIBRARY_PATH=${QT_INSTALL_PREFIX}/lib:${INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}
 
 ./linuxdeploy-x86_64.AppImage --appdir=AppDir --plugin qt --output appimage

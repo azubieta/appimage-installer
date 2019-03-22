@@ -17,7 +17,8 @@ mkdir -p ${ATTICA_BUILD_DIR}; cd ${ATTICA_BUILD_DIR}
 cmake ${ATTICA_SOURCE_DIR} \
     -DCMAKE_INSTALL_PREFIX=${INSTALL_PREFIX} \
     -DCMAKE_BUILD_TYPE=Release \
-    -Decm_DIR=${INSTALL_PREFIX}/share/ECM/cmake
+    -Decm_DIR=${INSTALL_PREFIX}/share/ECM/cmake \
+    -DQt5Widgets_DIR=${QT_INSTALL_PREFIX}/lib/cmake/Qt5Widgets
 
 sudo make -j`nproc` install
 

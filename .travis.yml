@@ -21,18 +21,19 @@ addons:
       - libarchive-dev
       - libfuse-dev
       - liblzma-dev
-      - qt510base
-      - qt510xmlpatterns
-      - qt510x11extras
-      - qt510svg
-env:
-  - QT5_INSTALL_PREFIX=/opt/qt510 INSTALL_PREFIX=/usr PROJECT_BUILD_DIR=/tmp/build
+      - qt510-meta-minimal
 
+env:
+  - QT_INSTALL_PREFIX=/opt/qt510 INSTALL_PREFIX=/usr PROJECT_BUILD_DIR=/tmp/build QT_SELECT=qt5
 
 install:
+  - "/opt/qt510/bin/qt510-env.sh"
+  - find /opt/qt510/lib/cmake
+  - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
   - .travis/install_ecm_from_sources.sh
   - .travis/install_kf5attica_from_sources.sh
   - .travis/install_libappimage_from_sources.sh
+
 script:
   - /opt/qt510/bin/qt510-env.sh
   - export SOURCES_DIR=${PWD}

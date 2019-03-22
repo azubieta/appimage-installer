@@ -10,7 +10,7 @@ fi
 ATTICA_SOURCE_DIR=/tmp/attica_sources
 ATTICA_BUILD_DIR=/tmp/attica_build
 
-git clone https://anongit.kde.org/attica.git --depth=1 ${ATTICA_SOURCE_DIR}
+git clone git://anongit.kde.org/attica.git --depth=1 ${ATTICA_SOURCE_DIR}
 git -C ${ATTICA_SOURCE_DIR} submodule update --init --recursive;
 
 mkdir -p ${ATTICA_BUILD_DIR}; cd ${ATTICA_BUILD_DIR}

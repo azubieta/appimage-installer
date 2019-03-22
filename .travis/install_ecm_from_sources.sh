@@ -10,7 +10,7 @@ fi
 ECM_SOURCE_DIR=/tmp/ecm_sources
 ECM_BUILD_DIR=/tmp/ecm_build
 
-git clone https://anongit.kde.org/extra-cmake-modules.git --depth=1 ${ECM_SOURCE_DIR}
+git clone git://anongit.kde.org/extra-cmake-modules.git --depth=1 ${ECM_SOURCE_DIR}
 git -C ${ECM_SOURCE_DIR} submodule update --init --recursive;
 
 mkdir -p ${ECM_BUILD_DIR}; cd ${ECM_BUILD_DIR}

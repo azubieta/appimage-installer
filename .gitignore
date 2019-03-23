@@ -34,3 +34,6 @@
 # CLion
 .idea
 cmake-build-*
+
+# CPack
+cmake/GIT_COMMIT

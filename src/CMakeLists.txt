@@ -42,10 +42,16 @@ install(
 
 # Install all the dependenies so we can properly create "portable" or debian packages
 if(INSTALL_DEPENDENCIES)
-    set(CMAKE_INSTALL_RPATH "../${CMAKE_INSTALL_LIBDIR}/appmage-user-tools")
+    # libicu is required by qt and the package name changes from ubuntu trusty to ubuntu bionic
+    find_library(ICU_LIBRARY NAMES icuuc)
+    get_filename_component(ICU_DIR ${ICU_LIBRARY} PATH)
+    message("ICU_DIR  ${ICU_DIR}")
+    file(GLOB LIBICU_BINARIES "${ICU_DIR}/libicu*so*")
+    message("LIBICU_BINARIES  ${LIBICU_BINARIES}")
 
     install(
         FILES
+        ${LIBICU_BINARIES}
         $<TARGET_SONAME_FILE:Qt5::Core>
         $<TARGET_LINKER_FILE:Qt5::Core>
         $<TARGET_SONAME_FILE:Qt5::Network>

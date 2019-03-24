@@ -36,7 +36,7 @@ if(CPACK_DEBIAN_COMPATIBILITY_LEVEL)
 endif()
 
 # package name
-set(CPACK_DEBIAN_AIUT_PACKAGE_NAME "appimage-user-tools")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "appimage-user-tools")
 
-# improve dependency list
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+# Dependencies
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libarchive13, libc6 (>= 2.17), libgcc1 (>= 1:4.1.1), libglib2.0-0 (>= 2.22.0), liblzma5 (>= 5.1.1alpha+20110809), libstdc++6 (>= 4.6), zlib1g (>= 1:1.1.4)")

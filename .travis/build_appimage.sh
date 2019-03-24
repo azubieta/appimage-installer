@@ -12,9 +12,7 @@ SOURCES_DIR=`realpath $0`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 
-cmake ${SOURCES_DIR} -DCMAKE_INSTALL_PREFIX=/usr -Dlibappimage_DIR=${INSTALL_PREFIX}/lib/cmake/libappimage -DINSTALL_DEPENDENCIES=ON
-make -j`nproc` install DESTDIR=AppDir
-
+# Build Appimage
 wget -nc https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget -nc https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
 

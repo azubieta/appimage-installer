@@ -36,11 +36,7 @@ if(CPACK_DEBIAN_COMPATIBILITY_LEVEL)
 endif()
 
 # package name
-# TODO: decide on package name
-set(CPACK_DEBIAN_AIUT_PACKAGE_NAME "appimage-user-tools")
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "appimage-user-tools")
 
-# TODO: review package list
-set(CPACK_DEBIAN_AIUT_PACKAGE_DEPENDS "libqt5network5 (>= 5.2.1), libqt5core5a (>= 5.2.1), libappimage (>= 0.1.9, <= 0.2.0)")
-
-# improve dependency list
-set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)
+# Dependencies
+set(CPACK_DEBIAN_PACKAGE_DEPENDS "libarchive13, libc6 (>= 2.17), libgcc1 (>= 1:4.1.1), libglib2.0-0 (>= 2.22.0), liblzma5 (>= 5.1.1alpha+20110809), libstdc++6 (>= 4.6), zlib1g (>= 1:1.1.4)")

@@ -14,6 +14,10 @@ include(GNUInstallDirs)
 find_package(libappimage REQUIRED)
 find_package(Qt5 COMPONENTS Core Network XmlPatterns Gui REQUIRED)
 
+# Config
+option(INSTALL_DEPENDENCIES "Dependencies will be installed with the package" OFF)
+
+
 # Source
 add_subdirectory(src)
 add_subdirectory(res)

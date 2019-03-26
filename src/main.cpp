@@ -4,7 +4,7 @@
 
 // local
 #include "commands/SearchCommand.h"
-#include "commands/GetCommand.h"
+#include "commands/InstallCommand.h"
 #include "commands/ListCommand.h"
 #include "commands/RemoveCommand.h"
 
@@ -13,12 +13,12 @@ int main(int argc, char** argv) {
 
     QCommandLineParser parser;
     parser.addPositionalArgument("command", QCoreApplication::translate("cli-main",
-                                                                        "Command to be executed: search | get | list | update | remove"));
+                                                                        "Command to be executed: search | install | list | update | remove"));
     parser.setApplicationDescription(
         QCoreApplication::translate("cli-main",
                                     "Command details\n"
                                     "   search <query>              list applications available in the store\n"
-                                    "   get <STORE ID>              get the application with the given store id\n"
+                                    "   install <STORE ID>              get the application with the given store id\n"
                                     "   list                        list applications available on your system\n"
                                     "   update <APP ID>             update if possible the given application\n"
                                     "   remove <APP ID>             remove the application from your system"));
@@ -39,12 +39,12 @@ int main(int argc, char** argv) {
         command = new SearchCommand(args.first());
     }
 
-    if (args.first() == "get") {
+    if (args.first() == "install") {
         args.pop_front();
         if (args.empty())
             qFatal("Missing store id. Example:\n\tapp get 1230");
 
-        command = new GetCommand(args.first());
+        command = new InstallCommand(args.first());
     }
 
     if (args.first() == "list")

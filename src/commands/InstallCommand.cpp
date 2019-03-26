@@ -14,31 +14,31 @@ extern "C" {
 
 // local
 #include <gateways/FileDownload.h>
-#include "GetCommand.h"
+#include "InstallCommand.h"
 
-GetCommand::GetCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout) {
+InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout) {
 
     connect(&providerManager, &Attica::ProviderManager::providerAdded, this,
-            &GetCommand::handleAtticaProviderAdded);
+            &InstallCommand::handleAtticaProviderAdded);
 
     connect(&providerManager, &Attica::ProviderManager::failedToLoad, this,
-            &GetCommand::handleAtticaFailedToLoad);
+            &InstallCommand::handleAtticaFailedToLoad);
 }
 
-void GetCommand::execute() {
+void InstallCommand::execute() {
     providerManager.addProviderFile(QUrl("https://appimagehub.com/ocs/providers.xml"));
 }
 
-void GetCommand::createApplicationsDir() {
+void InstallCommand::createApplicationsDir() {
     QDir home = QDir::home();
     home.mkdir("Applications");
 }
 
-QString GetCommand::buildTargetPath(const QString& contentId) {
+QString InstallCommand::buildTargetPath(const QString& contentId) {
     return QDir::homePath() + "/Applications/" + contentId + ".AppImage";
 }
 
-void GetCommand::handleDownloadProgress(qint64 progress, qint64 total, const QString& message) {
+void InstallCommand::handleDownloadProgress(qint64 progress, qint64 total, const QString& message) {
     // Draw nice [==   ] progress bar
     out << message;
     // clear spaces in the right
@@ -51,11 +51,12 @@ void GetCommand::handleDownloadProgress(qint64 progress, qint64 total, const QSt
     out.flush();
 }
 
-void GetCommand::handleDownloadCompleted() {
+void InstallCommand::handleDownloadCompleted() {
     QFile targetFile(targetPath);
     auto permissions = targetFile.permissions();
 
-    qInfo() << QCoreApplication::translate("cli-main", "Installing");
+    qInfo() << "";
+    qInfo() << "Installing";
 
     // make it executable
     targetFile.setPermissions(permissions | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
@@ -63,13 +64,13 @@ void GetCommand::handleDownloadCompleted() {
     // integrate with the desktop environment
     appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
-    qInfo() << QCoreApplication::translate("cli-main", "Installation completed");
+    qInfo() << "Installation completed";
     fileDownload->deleteLater();
 
     emit Command::executionCompleted();
 }
 
-void GetCommand::handleDownloadFailed(const QString& message) {
+void InstallCommand::handleDownloadFailed(const QString& message) {
     // Clean up
     QFile::remove(targetPath);
     fileDownload->deleteLater();
@@ -77,14 +78,14 @@ void GetCommand::handleDownloadFailed(const QString& message) {
     emit executionFailed(message);
 }
 
-void GetCommand::getDownloadLink() {
+void InstallCommand::getDownloadLink() {
     auto getDownloadLinkJob = provider.downloadLink(appId);
-    connect(getDownloadLinkJob, &Attica::BaseJob::finished, this, &GetCommand::handleGetDownloadLinkJobFinished);
+    connect(getDownloadLinkJob, &Attica::BaseJob::finished, this, &InstallCommand::handleGetDownloadLinkJobFinished);
 
     getDownloadLinkJob->start();
 }
 
-void GetCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
+void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
     auto* downloadLinkJob = dynamic_cast<Attica::ItemJob<Attica::DownloadItem>*>(job);
     if (downloadLinkJob) {
         Attica::DownloadItem contents = downloadLinkJob->result();
@@ -99,9 +100,9 @@ void GetCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
             fileDownload = new FileDownload(contents.url().toString(), targetPath, this);
             fileDownload->setProgressNotificationsEnabled(true);
 
-            connect(fileDownload, &Download::progress, this, &GetCommand::handleDownloadProgress, Qt::QueuedConnection);
-            connect(fileDownload, &Download::completed, this, &GetCommand::handleDownloadCompleted);
-            connect(fileDownload, &Download::stopped, this, &GetCommand::handleDownloadFailed);
+            connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress, Qt::QueuedConnection);
+            connect(fileDownload, &Download::completed, this, &InstallCommand::handleDownloadCompleted);
+            connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed);
 
             out << "Getting " << appId << " from " << contents.url().toString() << "\n";
             fileDownload->start();
@@ -110,8 +111,8 @@ void GetCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
         emit executionFailed("Unable to resolve the application download link.");
 }
 
-void GetCommand::handleAtticaProviderAdded(const Attica::Provider& provider) {
-    GetCommand::provider = provider;
+void InstallCommand::handleAtticaProviderAdded(const Attica::Provider& provider) {
+    InstallCommand::provider = provider;
 
     getDownloadLink();
 }

@@ -23,7 +23,7 @@ add_executable(
     commands/SearchCommand.cpp
     commands/RemoveCommand.cpp
     commands/ListCommand.cpp
-    commands/GetCommand.cpp
+    commands/InstallCommand.cpp
 )
 
 target_link_libraries(

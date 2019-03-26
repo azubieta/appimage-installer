@@ -11,10 +11,10 @@
 
 class FileDownload;
 
-class GetCommand : public Command {
+class InstallCommand : public Command {
 Q_OBJECT
 public:
-    GetCommand(const QString& appId, QObject* parent = nullptr);
+    InstallCommand(const QString& appId, QObject* parent = nullptr);
 
 public slots:
     void execute() override;

@@ -5,6 +5,7 @@ extern "C" {
 
 // libraries
 #include <QDir>
+#include <QCoreApplication>
 #include <Attica/ItemJob>
 #include <Attica/GetJob>
 #include <Attica/Content>
@@ -54,12 +55,15 @@ void GetCommand::handleDownloadCompleted() {
     QFile targetFile(targetPath);
     auto permissions = targetFile.permissions();
 
+    qInfo() << QCoreApplication::translate("cli-main", "Installing");
+
     // make it executable
     targetFile.setPermissions(permissions | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
 
     // integrate with the desktop environment
     appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
+    qInfo() << QCoreApplication::translate("cli-main", "Installation completed");
     fileDownload->deleteLater();
 
     emit Command::executionCompleted();

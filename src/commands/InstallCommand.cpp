@@ -16,7 +16,8 @@ extern "C" {
 #include <gateways/FileDownload.h>
 #include "InstallCommand.h"
 
-InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout) {
+InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout),
+                                                                        fileDownload(nullptr) {
 
     connect(&providerManager, &Attica::ProviderManager::providerAdded, this,
             &InstallCommand::handleAtticaProviderAdded);

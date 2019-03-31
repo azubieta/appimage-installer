@@ -62,9 +62,13 @@ void InstallCommand::handleDownloadCompleted() {
     targetFile.setPermissions(permissions | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
 
     // integrate with the desktop environment
-    appimage_register_in_system(targetPath.toStdString().c_str(), false);
+    int res = appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
-    qInfo() << "Installation completed";
+    if (res == 0)
+        qInfo() << "Installation completed";
+    else
+        qInfo() << "Installation failed";
+
     fileDownload->deleteLater();
 
     emit Command::executionCompleted();
@@ -100,7 +104,8 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
             fileDownload = new FileDownload(contents.url().toString(), targetPath, this);
             fileDownload->setProgressNotificationsEnabled(true);
 
-            connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress, Qt::QueuedConnection);
+            connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,
+                    Qt::QueuedConnection);
             connect(fileDownload, &Download::completed, this, &InstallCommand::handleDownloadCompleted);
             connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed);
 

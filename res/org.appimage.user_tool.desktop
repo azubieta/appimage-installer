@@ -6,3 +6,4 @@ Comment=Manage AppImages on your system
 TryExec=app
 Exec=app %F
 Icon=appimage_logo
+Categories=Utility;

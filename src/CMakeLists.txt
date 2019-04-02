@@ -49,3 +49,12 @@ if(INSTALL_LIBAPPIMAGE)
         DESTINATION ${CMAKE_INSTALL_LIBDIR}/appmage-user-tools COMPONENT AIUT
     )
 endif()
+
+if(INSTALL_ATTICA)
+    install(
+        FILES
+        $<TARGET_SONAME_FILE:KF5::Attica>
+        $<TARGET_LINKER_FILE:KF5::Attica>
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appmage-user-tools COMPONENT AIUT
+    )
+endif()

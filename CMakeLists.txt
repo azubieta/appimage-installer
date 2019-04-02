@@ -14,8 +14,9 @@ include(GNUInstallDirs)
 find_package(libappimage REQUIRED)
 find_package(Qt5 COMPONENTS Core Network XmlPatterns Gui REQUIRED)
 
-# Config
+## Config
 option(INSTALL_LIBAPPIMAGE "Install libAppImage as part of this project" OFF)
+option(INSTALL_ATTICA "Install KF5 Attica as part of this project" OFF)
 
 
 # Source

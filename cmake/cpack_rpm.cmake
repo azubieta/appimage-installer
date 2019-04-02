@@ -13,4 +13,3 @@ endif()
 
 set(CPACK_RPM_PACKAGE_AUTOREQ 1)
 set(CPACK_RPM_PACKAGE_AUTOPROV 1)
-set(CPACK_RPM_PACKAGE_PROVIDES "libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)")

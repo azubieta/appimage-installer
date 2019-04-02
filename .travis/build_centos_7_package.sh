@@ -7,6 +7,9 @@ SOURCES_DIR=`dirname ${SOURCES_DIR}`
 
 mkdir docker-centos7-build-release
 
+export CENTOS7_PACKAGE_REQUIRES="boost-filesystem, libarchive, cairo"
+export CENTOS7_PACKAGE_PROVIDES="libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)"
+
 sudo docker build -t build/centos7 ${SOURCES_DIR}/.travis/docker/centos7/
 sudo docker run -v ${PWD}:/source -v ${PWD}/docker-centos7-build-release:/build build/centos7 /bin/bash -c "\
         cmake3 /source \
@@ -14,6 +17,8 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-centos7-build-release:/build 
             -DINSTALL_ATTICA=On\
             -DCMAKE_INSTALL_PREFIX=/usr\
             -DCMAKE_BUILD_TYPE=Release\
+            -CPACK_RPM_PACKAGE_REQUIRES=\"${CENTOS7_PACKAGE_REQUIRES}\"\
+            -DCPACK_RPM_PACKAGE_PROVIDES=\"${CENTOS7_PACKAGE_PROVIDES}\"\
             &&\
          make -j`nproc` &&\
          cpack3 -G RPM"

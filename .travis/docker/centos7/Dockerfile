@@ -36,7 +36,7 @@ RUN git clone git://anongit.kde.org/attica.git --depth=1 -b 'v5.54.0' /tmp/attic
 RUN cd /tmp/attica && git submodule update --init --recursive;
 
 RUN cd /tmp/attica &&\
-    cmake3 . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    cmake3 . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DATTICA_STATIC_BUILD=ON && \
     make -j`nproc` install
 
 

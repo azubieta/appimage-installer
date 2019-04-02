@@ -25,4 +25,5 @@ add_subdirectory(res)
 # Packaging
 include(cmake/cpack_general.cmake)
 include(cmake/cpack_deb.cmake)
+include(cmake/cpack_rpm.cmake)
 include(CPack)

@@ -68,7 +68,7 @@ int main(int argc, char** argv) {
             qWarning() << message;
         });
 
-        QMetaObject::invokeMethod(&app, &QCoreApplication::startingUp);
+        QMetaObject::invokeMethod(&app, Q_SLOT("startingUp"));
         command->execute();
 
         return QCoreApplication::exec();

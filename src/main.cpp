@@ -1,5 +1,6 @@
 // libraries
 #include <QDebug>
+#include <QTimer>
 #include <QCommandLineParser>
 
 // local
@@ -68,8 +69,7 @@ int main(int argc, char** argv) {
             qWarning() << message;
         });
 
-        QMetaObject::invokeMethod(&app, Q_SLOT("startingUp"));
-        command->execute();
+        QTimer::singleShot(0, command, &Command::execute);
 
         return QCoreApplication::exec();
     } else

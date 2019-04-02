@@ -6,8 +6,8 @@
 class Command : public QObject {
 Q_OBJECT
 public:
-    Command(QObject *parent = nullptr): QObject(parent) {}
-    virtual ~Command() {}
+    explicit Command(QObject *parent = nullptr): QObject(parent) {}
+    ~Command() override {}
 
 public Q_SLOTS:
     virtual void execute() = 0;

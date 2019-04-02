@@ -15,5 +15,5 @@ endif()
 set(CPACK_RPM_PACKAGE_AUTOREQ 0)
 
 # Set package requieres manually
-set(CPACK_RPM_PACKAGE_REQUIRES "glibc, libgcc, libstdc++, boost-filesystem, libarchive, fuse, cairo, librsvg2")
+set(CPACK_RPM_PACKAGE_REQUIRES "glibc, libgcc, libstdc++, boost-filesystem, libarchive, fuse, cairo, librsvg2, libicu, glib2, pcre2")
 

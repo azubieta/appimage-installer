@@ -19,6 +19,7 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-centos7-build-release:/build 
             -DCMAKE_BUILD_TYPE=Release \
             -DCPACK_RPM_PACKAGE_REQUIRES='${CENTOS7_PACKAGE_REQUIRES}' \
             -DCPACK_RPM_PACKAGE_PROVIDES='${CENTOS7_PACKAGE_PROVIDES}' \
+            -DCPACK_RPM_PACKAGE_RELEASE_DIST=ON \
             &&\
          make -j`nproc` &&\
          cpack3 -G RPM"

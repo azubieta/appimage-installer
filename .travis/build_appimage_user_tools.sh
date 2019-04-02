@@ -12,5 +12,5 @@ SOURCES_DIR=`realpath $0`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 
-cmake ${SOURCES_DIR} -DCMAKE_INSTALL_PREFIX=/usr -Dlibappimage_DIR=${INSTALL_PREFIX}/lib/cmake/libappimage -DINSTALL_DEPENDENCIES=ON
+cmake ${SOURCES_DIR} -DCMAKE_INSTALL_PREFIX=/usr -Dlibappimage_DIR=${INSTALL_PREFIX}/lib/cmake/libappimage -DINSTALL_LIBAPPIMAGE=ON
 make -j`nproc` install DESTDIR=AppDir

@@ -20,6 +20,9 @@ RUN cd /tmp/libappimage && \
         -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
 
+RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_42.3/KDE:Frameworks5.repo
+RUN zypper --non-interactive --no-gpg-checks refresh
+
 RUN zypper --non-interactive install qt5-qtxmlpatterns-devel qt5-qtnetwork-devel qt5-qtbase-devel attica-qt5
 
 WORKDIR /build

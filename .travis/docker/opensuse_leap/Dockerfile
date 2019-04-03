@@ -1,6 +1,6 @@
 FROM opensuse:42.3
 
-RUN zypper addrepo --non-interactive https://download.opensuse.org/repositories/devel:tools:building/openSUSE_Leap_42.3/devel:tools:building.repo
+RUN zypper addrepo https://download.opensuse.org/repositories/devel:tools:building/openSUSE_Leap_42.3/devel:tools:building.repo
 RUN zypper refresh --non-interactive --auto-agree-with-licenses --no-gpg-checks
 
 # Install libappimage build dependencies

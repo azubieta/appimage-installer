@@ -22,4 +22,4 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-centos7-build-release:/build 
             -CPACK_RPM_PACKAGE_NAME=appimage_user_tools-centos-7 \
             &&\
          make -j`nproc` &&\
-         cpack3 -G RPM"
+         cpack3 -G RPM -G DEB -R 0.1.0-centos-7"

@@ -5,6 +5,10 @@ compiler: gcc
 notifications:
   email: false
 
+addons:
+  apt:
+    packages:
+      - realpath wget git realpath
 matrix:
   include:
     ## Build AppImage
@@ -16,8 +20,9 @@ matrix:
             - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
           packages:
             - realpath
-            - git
             - wget
+            - git
+            - realpath
             - cmake
             - desktop-file-utils
             - librsvg2-bin
@@ -44,36 +49,23 @@ matrix:
 
     ## Build Debian buster package
     - env: PKG_BUILD=DEBIAN_BUSTER
-
-      addons:
-        apt:
-          packages:
-            - realpath wget git
-
       script:
         - .travis/build_debian_buster_package.sh
 
     ## Build Centos 7 package
     - env: PKG_BUILD=CENTOS_7
-
-      addons:
-        apt:
-          packages:
-            - realpath wget git
-
       script:
         - .travis/build_centos_7_package.sh
 
     ## Build Ubuntu Bionic package
     - env: PKG_BUILD=UBUNTU_BIONIC
-
-      addons:
-        apt:
-          packages:
-            - realpath wget git
-
       script:
         - .travis/build_ubuntu_bionic_package.sh
+
+    ## Build OpenSuse 42.3 package
+    - env: PKG_BUILD=OPENSUSE_LEAP
+      script:
+        - .travis/build_opensuse_leap_package.sh
 
 after_success:
   - ls -lh

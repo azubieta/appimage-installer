@@ -20,6 +20,7 @@ RUN cd /tmp/libappimage && \
         -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
 
+RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt/openSUSE_Leap_42.3/KDE:Qt.repo
 RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_42.3/KDE:Frameworks5.repo
 RUN zypper --non-interactive --no-gpg-checks refresh
 

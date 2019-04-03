@@ -10,7 +10,7 @@ set(CMAKE_AUTOMOC ON)
 set(CMAKE_AUTOUIC ON)
 
 if(INSTALL_LIBAPPIMAGE)
-    set(CMAKE_INSTALL_RPATH "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}/appmage-user-tools")
+    set(CMAKE_INSTALL_RPATH "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}/appmagehub_cli")
 endif()
 
 add_executable(
@@ -37,7 +37,7 @@ target_link_libraries(
 # Install
 install(
     TARGETS app
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT AIUT
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT APPIMAGEHUB_CLI
 )
 
 # Install libappimage with the main executable
@@ -46,7 +46,7 @@ if(INSTALL_LIBAPPIMAGE)
         FILES
         $<TARGET_SONAME_FILE:libappimage>
         $<TARGET_LINKER_FILE:libappimage>
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appmage-user-tools COMPONENT AIUT
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appimagehub_cli COMPONENT APPIMAGEHUB_CLI
     )
 endif()
 
@@ -55,6 +55,6 @@ if(INSTALL_ATTICA)
         FILES
         $<TARGET_SONAME_FILE:KF5::Attica>
         $<TARGET_LINKER_FILE:KF5::Attica>
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appmage-user-tools COMPONENT AIUT
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appimagehub_cli COMPONENT APPIMAGEHUB_CLI
     )
 endif()

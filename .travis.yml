@@ -8,7 +8,7 @@ notifications:
 addons:
   apt:
     packages:
-      - realpath wget git
+      - realpath wget git realpath
 matrix:
   include:
     ## Build AppImage

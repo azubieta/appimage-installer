@@ -23,7 +23,7 @@ RUN cd /tmp/libappimage && \
 RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_42.3/KDE:Frameworks5.repo
 RUN zypper --non-interactive --no-gpg-checks refresh
 
-RUN zypper --non-interactive install qt5-qtxmlpatterns-devel qt5-qtnetwork-devel qt5-qtbase-devel attica-qt5
+RUN zypper --non-interactive install libKF5Attica5-5.56.0
 
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

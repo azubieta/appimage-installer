@@ -1,7 +1,7 @@
 FROM opensuse:leap
 
 RUN zypper --non-interactive update
-RUN zypper --non-interactive install devtoolset-4-gcc* openssl-devel wget cmake git
+RUN zypper --non-interactive install openssl-devel wget cmake git
 
 # Install libappimage build dependencies
 RUN zypper --non-interactive install desktop-file-utils librsvg2-devel cairo-devel glib-devel libarchive-devel fuse-devel boost-devel boost-filesystem vim-common

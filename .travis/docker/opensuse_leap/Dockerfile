@@ -4,7 +4,7 @@ RUN zypper --non-interactive update
 RUN zypper --non-interactive install openssl-devel wget cmake git
 
 # Install libappimage build dependencies
-RUN zypper --non-interactive install desktop-file-utils librsvg2-devel cairo-devel glib2-devel libarchive-devel fuse-devel boost-devel libboost-filesystem-dev vim
+RUN zypper --non-interactive install desktop-file-utils librsvg2-devel cairo-devel glib2-devel libarchive-devel fuse-devel boost-devel libboost-filesystem1.58-dev vim
 
 # Build and install libappimage
 RUN git clone https://github.com/AppImage/libappimage.git --depth=1 /tmp/libappimage

@@ -1,11 +1,11 @@
-FROM opensuse:leap
+FROM opensuse:42.3
 
 RUN zypper --non-interactive update
 
 # Install libappimage build dependencies
 RUN zypper --non-interactive install openssl-devel wget cmake git gcc-c++ \
     desktop-file-utils librsvg2-devel cairo-devel glib2-devel libarchive-devel \
-    fuse-devel libboost_filesystem1_61_0 boost-devel vim automake
+    fuse-devel libboost_filesystem1_61_0 boost-devel vim automake libtool patch
 
 # Build and install libappimage
 RUN git clone https://github.com/AppImage/libappimage.git --depth=1 /tmp/libappimage

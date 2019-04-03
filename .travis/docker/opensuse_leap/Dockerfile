@@ -1,7 +1,6 @@
 FROM opensuse:leap
 
 RUN zypper --non-interactive update
-RUN zypper --non-interactive install yum-plugin-ovl centos-release-scl epel-release
 RUN zypper --non-interactive install devtoolset-4-gcc* openssl-devel wget cmake git
 
 # Install libappimage build dependencies

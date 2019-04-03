@@ -67,7 +67,7 @@ matrix:
         - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
         - bash upload.sh docker-build-release/appimage_user_tools_*.deb
 
-    ## Build Debian buster package
+    ## Build Centos 7 package
     - env: PKG_BUILD=CENTOS_7
 
       addons:
@@ -84,3 +84,21 @@ matrix:
         - if [ "$TRAVIS_BRANCH" != "$TRAVIS_TAG" ] && [ "$TRAVIS_BRANCH" != "master" ]; then export TRAVIS_EVENT_TYPE=pull_request; fi
         - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
         - bash upload.sh docker-centos_7-build-release/appimage_user_tools*.rpm
+
+    ## Build Ubuntu Bionic package
+    - env: PKG_BUILD=UBUNTU_BIONIC
+
+      addons:
+        apt:
+          packages:
+            - realpath wget git
+
+      script:
+        - .travis/build_ubuntu_bionic_package.sh
+
+      after_success:
+        - ls -lh
+        # make sure only pushes to rewrite create a new release, otherwise pretend PR and upload to transfer.sh
+        - if [ "$TRAVIS_BRANCH" != "$TRAVIS_TAG" ] && [ "$TRAVIS_BRANCH" != "master" ]; then export TRAVIS_EVENT_TYPE=pull_request; fi
+        - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
+        - bash upload.sh docker-centos_7-build-release/appimage_user_tools*.deb

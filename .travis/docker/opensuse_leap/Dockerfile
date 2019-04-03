@@ -25,7 +25,7 @@ RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_
 RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_42.3/KDE:Frameworks5.repo
 RUN zypper --non-interactive --no-gpg-checks refresh
 
-RUN zypper --non-interactive install libqt5-qtbase-devel libKF5Attica5-5.56.0
+RUN zypper --non-interactive install libqt5-qtbase-devel libQt5XmlPatterns-devel libKF5Attica5-5.56.0
 
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

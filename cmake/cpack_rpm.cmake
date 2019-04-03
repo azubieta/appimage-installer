@@ -11,9 +11,5 @@ if(DEFINED ENV{ARCH})
     endif()
 endif()
 
-# Disable automatic requirements generation
-set(CPACK_RPM_PACKAGE_AUTOREQ 0)
-
-# Set package requieres manually
-set(CPACK_RPM_PACKAGE_REQUIRES "glibc, libgcc, libstdc++, boost-filesystem, libarchive, fuse-libs, cairo, librsvg2, libicu, glib2, pcre2-utf16")
-
+set(CPACK_RPM_PACKAGE_AUTOREQ 1)
+set(CPACK_RPM_PACKAGE_AUTOPROV 1)

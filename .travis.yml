@@ -19,6 +19,10 @@ matrix:
           sources:
             - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
           packages:
+            - realpath
+            - wget
+            - git
+            - realpath
             - cmake
             - desktop-file-utils
             - librsvg2-bin

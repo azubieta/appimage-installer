@@ -1,7 +1,7 @@
 FROM opensuse:42.3
 
 RUN zypper addrepo https://download.opensuse.org/repositories/devel:tools:building/openSUSE_Leap_42.3/devel:tools:building.repo
-RUN zypper refresh --force
+RUN zypper refresh --force --non-interactive
 
 # Install libappimage build dependencies
 RUN zypper --non-interactive install openssl-devel wget cmake git gcc-c++ \

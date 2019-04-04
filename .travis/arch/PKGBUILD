@@ -1,5 +1,5 @@
 # Maintainer: Alexis Lopez Zubieta <contact@azubieta.net>
-projectname=AppImageLauncher
+projectname=appimage-user-tool
 
 pkgname=appimage-user-tool
 pkgver=0.0.1

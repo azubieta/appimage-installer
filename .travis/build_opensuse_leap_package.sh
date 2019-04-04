@@ -17,9 +17,8 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build build/op
             -DINSTALL_ATTICA=On\
             -DCMAKE_INSTALL_PREFIX=/usr \
             -DCMAKE_BUILD_TYPE=Release \
+            -DAPPIMAGEHUB_CLI_V_SUFFIX=\"-OpenSuse-42.3\" \
             -DCPACK_RPM_PACKAGE_REQUIRES='${OPENSUSE_PACKAGE_REQUIRES}' \
             -DCPACK_RPM_PACKAGE_PROVIDES='${OPENSUSE_PACKAGE_PROVIDES}' &&\
          make -j`nproc` &&\
-         cpack -G RPM -R 0.1.0-opensuse-leap && \
-         export FILE_NAME=`echo appimagehub_cli-*-Linux.rpm` && \
-         mv ${FILE_NAME} ${FILE_NAME/-Linux.rpm/-OpenSuse-42.3-Linux.rpm}"
+         cpack -G RPM"

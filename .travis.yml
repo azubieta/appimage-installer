@@ -67,6 +67,11 @@ matrix:
       script:
         - .travis/build_opensuse_leap_package.sh
 
+    ## Build ARCH package
+    - env: PKG_BUILD=ARCH
+      script:
+        - .travis/arch/build_package.sh
+
 after_success:
   - ls -lh
   # make sure only pushes to rewrite create a new release, otherwise pretend PR and upload to transfer.sh
@@ -75,3 +80,4 @@ after_success:
   - bash upload.sh appimage-user-tool*.AppImage*
   - bash upload.sh docker-build-release/appimage-user-tool*.rpm
   - bash upload.sh docker-build-release/appimage-user-tool*.deb
+  - bash upload.sh docker-build-release/appimage-user-tool*.pkg.tar.xz

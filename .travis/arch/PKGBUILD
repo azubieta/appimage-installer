@@ -1,0 +1,56 @@
+# Maintainer: Alexis Lopez Zubieta <contact@azubieta.net>
+projectname=appimage-user-tool
+
+pkgname=appimage-user-tool
+pkgver=0.0.1
+pkgrel=1
+epoch=
+pkgdesc="AppImageHub CLI client"
+arch=('x86_64')
+url="https://github.com/azubieta/$projectname"
+license=('MIT')
+groups=('appimage')
+depends=('qt5-base' 'qt5-xmlpatterns' 'attica' 'libappimage' 'librsvg')
+makedepends=('cmake')
+checkdepends=()
+optdepends=()
+provides=()
+conflicts=()
+replaces=()
+backup=()
+options=()
+install=
+changelog=
+source=("git://github.com/azubieta/$projectname#tag=continuous")
+sha256sums=('SKIP')
+noextract=()
+validpgpkeys=()
+
+pkgver() {
+  cd "$srcdir/$projectname"
+
+  printf "1alpha+git`date +%Y%m%d -u -d "$(git show -s --format=%ci $(git rev-parse HEAD))"`.%s" "$(git rev-parse --short HEAD)"
+}
+
+prepare() {
+  cd "$srcdir/$projectname"
+
+  git submodule update --init --recursive
+}
+
+build() {
+  cd "$srcdir/$projectname"
+
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
+  make
+}
+
+package() {
+  cd "$srcdir/$projectname"
+
+  # must re-run CMake in order to populate the list of library files to bundle
+  # see 2175cfb for more information
+  cmake .
+
+  make DESTDIR="$pkgdir" install
+}

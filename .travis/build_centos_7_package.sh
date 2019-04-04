@@ -21,5 +21,5 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build build/ce
             -DCPACK_RPM_PACKAGE_PROVIDES='${CENTOS7_PACKAGE_PROVIDES}' &&\
          make -j`nproc` && \
          cpack3 -G RPM -R 0.1.0-centos-7 && \
-         FILE_NAME=`echo appimagehub_cli-*-Linux.rpm` && \
+         export FILE_NAME=`echo appimagehub_cli-*-Linux.rpm` && \
          mv ${FILE_NAME} ${FILE_NAME/-Linux.rpm/-Centos-7-Linux.rpm}"

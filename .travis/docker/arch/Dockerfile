@@ -5,6 +5,5 @@ RUN pacman --noconfirm -Sy base-devel git cmake wget vim desktop-file-utils cair
 RUN useradd build
 RUN mkdir /build && chmod a+rwx /build
 
-USER build
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

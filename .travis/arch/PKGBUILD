@@ -41,7 +41,7 @@ prepare() {
 build() {
   cd "$srcdir/$projectname"
 
-  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release /source
+  cmake -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
   make
 }
 

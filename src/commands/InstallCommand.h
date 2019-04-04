@@ -41,7 +41,7 @@ protected slots:
 private:
     void createApplicationsDir();
 
-    QString buildTargetPath(const QString& contentId);
+    QString buildTargetPath(Attica::Content content);
 
     Attica::ProviderManager providerManager;
     Attica::Provider provider;

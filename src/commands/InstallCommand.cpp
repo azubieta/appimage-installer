@@ -35,8 +35,10 @@ void InstallCommand::createApplicationsDir() {
     home.mkdir("Applications");
 }
 
-QString InstallCommand::buildTargetPath(const QString& contentId) {
-    return QDir::homePath() + "/Applications/" + contentId + ".AppImage";
+QString InstallCommand::buildTargetPath(Attica::Content content) {
+    QString fileName = content.id() + '-' + content.name().replace(" ", "_") + '-' + content.version() + '-' +
+                       content.updated().toString("yyyyMMdd-HH:mm");
+    return QDir::homePath() + "/Applications/" + fileName.toLower() + ".AppImage";
 }
 
 void InstallCommand::handleDownloadProgress(qint64, qint64, const QString& message) {
@@ -93,25 +95,43 @@ void InstallCommand::handleDownloadFailed(const QString& message) {
 }
 
 void InstallCommand::getDownloadLink() {
-    auto getDownloadLinkJob = provider.downloadLink(appId);
+    auto getDownloadLinkJob = provider.requestContent(appId);
     connect(getDownloadLinkJob, &Attica::BaseJob::finished, this, &InstallCommand::handleGetDownloadLinkJobFinished);
 
     getDownloadLinkJob->start();
 }
 
 void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
-    auto* downloadLinkJob = dynamic_cast<Attica::ItemJob<Attica::DownloadItem>*>(job);
+    auto* downloadLinkJob = dynamic_cast<Attica::ItemJob<Attica::Content>*>(job);
     if (downloadLinkJob) {
-        Attica::DownloadItem contents = downloadLinkJob->result();
+        Attica::Content content = downloadLinkJob->result();
         downloadLinkJob->deleteLater();
 
-        if (contents.url().isEmpty()) {
+        // Find the right download link
+        QString architecture = QSysInfo::buildCpuArchitecture().replace("_", "-");
+        qDebug() << "Looking for " << architecture << " AppImages";
+        static QString archTag = "application##architecture=" + architecture;
+
+        QUrl downloadLink;
+        auto list = content.downloadUrlDescriptions();
+
+        for (const auto& downloadDescription : list) {
+            if (downloadDescription.tags().contains("application##packagetype=appimage") &&
+                downloadDescription.tags().contains(archTag)) {
+
+                downloadLink = downloadDescription.link();
+                targetPath = buildTargetPath(content);
+
+                break;
+            }
+        }
+
+        if (downloadLink.isEmpty()) {
             emit executionFailed("Unable to find a download for " + appId);
         } else {
             createApplicationsDir();
 
-            targetPath = buildTargetPath(contents.packageName());
-            fileDownload = new FileDownload(contents.url(), targetPath, this);
+            fileDownload = new FileDownload(downloadLink, targetPath, this);
             fileDownload->setProgressNotificationsEnabled(true);
 
             connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,
@@ -121,7 +141,7 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
             connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed,
                     Qt::QueuedConnection);
 
-            out << "Downloading " << appId << " from " << contents.url().toString() << "\n";
+            out << "Downloading " << appId << " from " << downloadLink.toString() << "\n";
             fileDownload->start();
         }
     } else

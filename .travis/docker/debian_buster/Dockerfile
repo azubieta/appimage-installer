@@ -19,7 +19,15 @@ RUN cd /tmp/libappimage && \
         -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
 
-# Install
-RUN apt-get install -y qttools5-dev libkf5attica-dev libqt5xmlpatterns5-dev
+# Build and install kf5-attica
+RUN apt-get install -y qttools5-dev libqt5xmlpatterns5-dev
+
+RUN git clone git://anongit.kde.org/attica.git --depth=1 -b 'v5.54.0' /tmp/attica
+RUN cd /tmp/attica && git submodule update --init --recursive;
+
+RUN cd /tmp/attica &&\
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

@@ -2,12 +2,12 @@
 #include "FileDownload.h"
 #include "Download.h"
 
-Download::Download(QString url, QObject *parent) : QObject(parent), source_url(url),
-                                                   running(false),
-                                                   progressNotificationsEnabled(false),
-                                                   isStopRequested(false),
-                                                   networkAccessManager(nullptr),
-                                                   speed(0), bytesRead(0), bytesReadLastTick(0) {
+Download::Download(QUrl url, QObject* parent) : QObject(parent), source_url(url),
+                                                running(false),
+                                                progressNotificationsEnabled(false),
+                                                isStopRequested(false),
+                                                networkAccessManager(nullptr),
+                                                speed(0), bytesRead(0), bytesReadLastTick(0) {
 }
 
 

@@ -7,12 +7,12 @@
 
 class Download : public QObject {
 Q_OBJECT
-    QString source_url;
+    QUrl source_url;
     bool running;
     bool progressNotificationsEnabled;
 
 public:
-    explicit Download(QString url, QObject *parent = nullptr);
+    explicit Download(QUrl url, QObject* parent = nullptr);
 
     virtual ~Download();
 

@@ -15,7 +15,7 @@ Q_OBJECT
     QFile file;
 
 public:
-    FileDownload(const QString &url, const QString &target_path, QObject *parent = nullptr);
+    FileDownload(const QUrl& url, const QString& target_path, QObject* parent = nullptr);
 
     virtual ~FileDownload();
 

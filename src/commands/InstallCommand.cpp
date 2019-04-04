@@ -110,8 +110,8 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
         } else {
             createApplicationsDir();
 
-            targetPath = buildTargetPath(appId);
-            fileDownload = new FileDownload(contents.url().toString(), targetPath, this);
+            targetPath = buildTargetPath(contents.packageName());
+            fileDownload = new FileDownload(contents.url(), targetPath, this);
             fileDownload->setProgressNotificationsEnabled(true);
 
             connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,

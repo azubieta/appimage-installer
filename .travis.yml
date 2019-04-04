@@ -80,4 +80,4 @@ after_success:
   - bash upload.sh appimage-user-tool*.AppImage*
   - bash upload.sh docker-build-release/appimage-user-tool*.rpm
   - bash upload.sh docker-build-release/appimage-user-tool*.deb
-  - bash upload.sh docker-build-release/appimage-user-tool-*.pkg.tar.xz
+  - bash upload.sh docker-build-release/appimage-user-tool*.pkg.tar.xz

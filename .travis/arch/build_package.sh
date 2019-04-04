@@ -4,8 +4,8 @@
 SOURCES_DIR=`realpath $0`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 
-mkdir docker-build-relaese
-chmod a+rwx docker-build-relaese
+mkdir docker-build-release
+chmod a+rwx docker-build-release
 
 sudo docker build -t build/arch ${SOURCES_DIR}
 sudo docker run -v ${PWD}:/sources -v ${PWD}/docker-build-release:/build build/arch \

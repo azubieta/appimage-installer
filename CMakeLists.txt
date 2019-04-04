@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(appimagehub_cli)
+project(appimage-user-tool)
 
 set(CMAKE_CXX_STANDARD 11)
 

@@ -1,6 +1,7 @@
-# appimage-user-tools
+# appimage-user-tool
 
-CLI client for <http://www.appimagehub.com>. Allow to search, get, remove and update the AppImage in your systems.
+CLI client for <http://www.appimagehub.com>. Allows to search, install, remove and update applications using the AppImage 
+package format.
 
 ## Usage
 ```bash
@@ -8,7 +9,7 @@ CLI client for <http://www.appimagehub.com>. Allow to search, get, remove and up
 Usage: app [options] command
 Command details
    search <query>              list applications available in the store
-   get <STORE ID>              get the application with the given store id
+   install <STORE ID>          install the application with the given store id
    list                        list applications available on your system
    update <APP ID>             update if possible the given application
    remove <APP ID>             remove the application from your system

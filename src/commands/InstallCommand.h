@@ -17,10 +17,12 @@ public:
     InstallCommand(const QString& appId, QObject* parent = nullptr);
 
 public slots:
+
     void execute() override;
 
 protected slots:
-    void handleDownloadProgress(qint64 progress, qint64 total, const QString &message);
+
+    void handleDownloadProgress(qint64 progress, qint64 total, const QString& message);
 
     void handleDownloadCompleted();
 
@@ -44,8 +46,10 @@ private:
     Attica::ProviderManager providerManager;
     Attica::Provider provider;
 
-    FileDownload *fileDownload;
+    FileDownload* fileDownload;
     QString appId;
     QString targetPath;
     QTextStream out;
+
+    void showInlineMessage(const QString& message);
 };

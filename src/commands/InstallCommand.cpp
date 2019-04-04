@@ -39,43 +39,52 @@ QString InstallCommand::buildTargetPath(const QString& contentId) {
     return QDir::homePath() + "/Applications/" + contentId + ".AppImage";
 }
 
-void InstallCommand::handleDownloadProgress(qint64 progress, qint64 total, const QString& message) {
-    // Draw nice [==   ] progress bar
-    out << message;
+void InstallCommand::handleDownloadProgress(qint64, qint64, const QString& message) {
+    if (message.isEmpty())
+        return;
+
+    showInlineMessage(message);
+}
+
+void InstallCommand::showInlineMessage(const QString& message) {
+    out << "\r" << message;
+
     // clear spaces in the right
     struct winsize size = {0x0};
     ioctl(1, TIOCGWINSZ, &size);
     for (int i = 0; i < size.ws_col - message.size(); i++)
         out << " ";
 
-    out << "\r";
     out.flush();
 }
 
 void InstallCommand::handleDownloadCompleted() {
-    QFile targetFile(targetPath);
-    auto permissions = targetFile.permissions();
+    showInlineMessage("Download completed");
 
-    qInfo() << "";
-    qInfo() << "Installing";
+    showInlineMessage("Installing");
+    QFile targetFile(targetPath);
 
     // make it executable
+    auto permissions = targetFile.permissions();
     targetFile.setPermissions(permissions | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
 
     // integrate with the desktop environment
     int res = appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
     if (res == 0)
-        qInfo() << "Installation completed";
+        showInlineMessage("Installation completed");
     else
-        qInfo() << "Installation failed";
+        showInlineMessage("Installation failed");
 
+    out << "\n";
     fileDownload->deleteLater();
 
     emit Command::executionCompleted();
 }
 
 void InstallCommand::handleDownloadFailed(const QString& message) {
+    showInlineMessage("Download failed: " + message);
+
     // Clean up
     QFile::remove(targetPath);
     fileDownload->deleteLater();
@@ -107,10 +116,12 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
 
             connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,
                     Qt::QueuedConnection);
-            connect(fileDownload, &Download::completed, this, &InstallCommand::handleDownloadCompleted);
-            connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed);
+            connect(fileDownload, &Download::completed, this, &InstallCommand::handleDownloadCompleted,
+                    Qt::QueuedConnection);
+            connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed,
+                    Qt::QueuedConnection);
 
-            out << "Getting " << appId << " from " << contents.url().toString() << "\n";
+            out << "Downloading " << appId << " from " << contents.url().toString() << "\n";
             fileDownload->start();
         }
     } else

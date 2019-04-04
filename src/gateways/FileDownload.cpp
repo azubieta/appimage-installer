@@ -1,6 +1,6 @@
 #include "FileDownload.h"
 
-FileDownload::FileDownload(const QString &url, const QString &target_path, QObject *parent)
+FileDownload::FileDownload(const QUrl& url, const QString& target_path, QObject* parent)
         : Download(url, parent), file(target_path) {
 
 }

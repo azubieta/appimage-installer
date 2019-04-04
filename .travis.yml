@@ -50,7 +50,7 @@ matrix:
     ## Build Debian buster package
     - env: PKG_BUILD=DEBIAN_BUSTER
       script:
-        - .travis/build_debian_buster_package.sh
+        - .travis/debian_buster/build_package.sh
 
     ## Build Centos 7 package
     - env: PKG_BUILD=CENTOS_7

@@ -5,7 +5,7 @@ SOURCES_DIR=`realpath $0`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 SOURCES_DIR=`dirname ${SOURCES_DIR}`
 
-mkdir docker-build-release
+
 
 sudo docker build -t build/arch ${SOURCES_DIR}/.travis/docker/arch/
 sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build build/arch \

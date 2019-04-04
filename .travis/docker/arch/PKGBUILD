@@ -22,8 +22,8 @@ options=()
 install=
 changelog=
 source=("git://github.com/azubieta/$projectname#tag=continuous")
+sha256sums=('SKIP')
 noextract=()
-md5sums=()
 validpgpkeys=()
 
 pkgver() {

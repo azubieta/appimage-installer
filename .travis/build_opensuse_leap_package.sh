@@ -17,7 +17,7 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build build/op
             -DINSTALL_ATTICA=On\
             -DCMAKE_INSTALL_PREFIX=/usr \
             -DCMAKE_BUILD_TYPE=Release \
-            -DAPPIMAGEHUB_CLI_V_SUFFIX=\"-OpenSuse-42.3\" \
+            -DAPPIMAGE_USER_TOOL_V_SUFFIX=\"-OpenSuse-42.3\" \
             -DCPACK_RPM_PACKAGE_REQUIRES='${OPENSUSE_PACKAGE_REQUIRES}' \
             -DCPACK_RPM_PACKAGE_PROVIDES='${OPENSUSE_PACKAGE_PROVIDES}' &&\
          make -j`nproc` &&\

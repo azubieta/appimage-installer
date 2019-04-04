@@ -37,7 +37,7 @@ target_link_libraries(
 # Install
 install(
     TARGETS app
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT APPIMAGEHUB_CLI
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT APPIMAGE_USER_TOOL
 )
 
 # Install libappimage with the main executable
@@ -46,7 +46,7 @@ if(INSTALL_LIBAPPIMAGE)
         FILES
         $<TARGET_SONAME_FILE:libappimage>
         $<TARGET_LINKER_FILE:libappimage>
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appimagehub_cli COMPONENT APPIMAGEHUB_CLI
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appimage-user-tool COMPONENT APPIMAGE_USER_TOOL
     )
 endif()
 
@@ -55,6 +55,6 @@ if(INSTALL_ATTICA)
         FILES
         $<TARGET_SONAME_FILE:KF5::Attica>
         $<TARGET_LINKER_FILE:KF5::Attica>
-        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appimagehub_cli COMPONENT APPIMAGEHUB_CLI
+        DESTINATION ${CMAKE_INSTALL_LIBDIR}/appimage-user-tool COMPONENT APPIMAGE_USER_TOOL
     )
 endif()

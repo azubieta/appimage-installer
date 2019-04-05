@@ -50,22 +50,22 @@ matrix:
     ## Build Debian buster package
     - env: PKG_BUILD=DEBIAN_BUSTER
       script:
-        - .travis/build_debian_buster_package.sh
+        - .travis/debian_buster/build_package.sh
 
     ## Build Centos 7 package
     - env: PKG_BUILD=CENTOS_7
       script:
-        - .travis/build_centos_7_package.sh
+        - .travis/centos_7/build_package.sh
 
     ## Build Ubuntu Bionic package
     - env: PKG_BUILD=UBUNTU_BIONIC
       script:
-        - .travis/build_ubuntu_bionic_package.sh
+        - .travis/ubuntu_bionic/build_package.sh
 
     ## Build OpenSuse 42.3 package
     - env: PKG_BUILD=OPENSUSE_LEAP
       script:
-        - .travis/build_opensuse_leap_package.sh
+        - .travis/opensuse_leap/build_package.sh
 
     ## Build ARCH package
     - env: PKG_BUILD=ARCH

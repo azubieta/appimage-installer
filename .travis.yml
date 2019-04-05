@@ -60,7 +60,7 @@ matrix:
     ## Build Ubuntu Bionic package
     - env: PKG_BUILD=UBUNTU_BIONIC
       script:
-        - .travis/build_ubuntu_bionic_package.sh
+        - .travis/ubuntu_bionic/build_package.sh
 
     ## Build OpenSuse 42.3 package
     - env: PKG_BUILD=OPENSUSE_LEAP

@@ -29,7 +29,7 @@ validpgpkeys=()
 pkgver() {
   cd "$srcdir/$projectname"
 
-  printf "1alpha+git`date +%Y%m%d -u -d "$(git show -s --format=%ci $(git rev-parse HEAD))"`.%s" "$(git rev-parse --short HEAD)"
+  printf "$pkgver+git`date +%Y%m%d -u -d "$(git show -s --format=%ci $(git rev-parse HEAD))"`.%s" "$(git rev-parse --short HEAD)"
 }
 
 prepare() {

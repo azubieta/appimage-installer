@@ -31,47 +31,53 @@ int main(int argc, char** argv) {
     if (args.empty())
         parser.showHelp(0);
 
+    QTextStream out(stdout);
+
     Command* command = nullptr;
-    if (args.first() == "search") {
+    if (!args.isEmpty() && args.first() == "search") {
         args.pop_front();
         if (args.empty())
-            qFatal("Missing search query. Example:\n\tapp search firefox");
-
-        command = new SearchCommand(args.first());
+            out << "Missing search query. Example:\n"
+                   "\tapp search firefox\n\n";
+        else
+            command = new SearchCommand(args.first());
     }
 
-    if (args.first() == "install") {
+    if (!args.isEmpty() && args.first() == "install") {
         args.pop_front();
         if (args.empty())
-            qFatal("Missing store id. Example:\n\tapp get 1230");
-
-        command = new InstallCommand(args.first());
+            out << "Missing store id. Example:\n"
+                   "\tapp get 1230\n\n";
+        else
+            command = new InstallCommand(args.first());
     }
 
-    if (args.first() == "list")
+    if (!args.isEmpty() && args.first() == "list")
         command = new ListCommand();
 
-    if (args.first() == "remove") {
+    if (!args.isEmpty() && args.first() == "remove") {
         args.pop_front();
         if (args.empty())
-            qFatal("Missing application id. Example:\n\tapp remove firefox");
-
-        command = new RemoveCommand(args.first());
+            out << "Missing application id. Example:\n"
+                   "\tapp remove firefox\n\n";
+        else
+            command = new RemoveCommand(args.first());
     }
 
-    if (args.first() == "update")
-        qFatal("ERROR: Updates aren't supported yet. Use AppImageUpate in the meanwhile.");
-
+    if (!args.isEmpty() && args.first() == "update")
+        out << "ERROR: Updates aren't supported yet. Use AppImageUpate in the meanwhile.\n";
     if (command) {
         QObject::connect(command, &Command::executionCompleted, &app, &QCoreApplication::quit, Qt::QueuedConnection);
         QObject::connect(command, &Command::executionFailed, &app, &QCoreApplication::quit, Qt::QueuedConnection);
-        QObject::connect(command, &Command::executionFailed, [](const QString& message) {
-            qWarning() << message;
+        QObject::connect(command, &Command::executionFailed, [&out](const QString& message) {
+            out << message;
         });
 
         QTimer::singleShot(0, command, &Command::execute);
 
         return QCoreApplication::exec();
-    } else
+    } else {
+        out.flush();
         parser.showHelp(0);
+    }
 }

@@ -65,7 +65,7 @@ matrix:
     ## Build OpenSuse 42.3 package
     - env: PKG_BUILD=OPENSUSE_LEAP
       script:
-        - .travis/build_opensuse_leap_package.sh
+        - .travis/opensuse_leap/build_package.sh
 
     ## Build ARCH package
     - env: PKG_BUILD=ARCH

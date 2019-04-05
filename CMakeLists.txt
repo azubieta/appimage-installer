@@ -11,20 +11,25 @@ include(cmake/versioning.cmake)
 include(GNUInstallDirs)
 
 # Dependencies
-find_package(libappimage REQUIRED)
+# avoid collissions with existing libappimage target when used from other projects
+if(NOT TARGET libappimage)
+    find_package(libappimage REQUIRED)
+endif()
 find_package(Qt5 COMPONENTS Core Network XmlPatterns Gui REQUIRED)
 
 ## Config
 option(INSTALL_LIBAPPIMAGE "Install libAppImage as part of this project" OFF)
 option(INSTALL_ATTICA "Install KF5 Attica as part of this project" OFF)
 
-
 # Source
 add_subdirectory(src)
 add_subdirectory(res)
 
 # Packaging
-include(cmake/cpack_general.cmake)
-include(cmake/cpack_deb.cmake)
-include(cmake/cpack_rpm.cmake)
-include(CPack)
+# only necessary when not being used from other projects
+if(CMAKE_SOURCE_DIR STREQUAL PROJECT_SOURCE_DIR)
+    include(cmake/cpack_general.cmake)
+    include(cmake/cpack_deb.cmake)
+    include(cmake/cpack_rpm.cmake)
+    include(CPack)
+endif()

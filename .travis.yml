@@ -55,7 +55,7 @@ matrix:
     ## Build Centos 7 package
     - env: PKG_BUILD=CENTOS_7
       script:
-        - .travis/build_centos_7_package.sh
+        - .travis/centos_7/build_package.sh
 
     ## Build Ubuntu Bionic package
     - env: PKG_BUILD=UBUNTU_BIONIC

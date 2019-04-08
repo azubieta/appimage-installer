@@ -22,34 +22,38 @@ public slots:
 
 protected slots:
 
+// Add appimagehub.com as attica provider
+    void handleAtticaProviderAdded(const Attica::Provider& provider);
+
+    void handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error);
+
+// Resolve AppImage file download link
+    void getDownloadLink();
+
+    void handleGetDownloadLinkJobFinished(Attica::BaseJob* job);
+
+// Download AppImage file
     void handleDownloadProgress(qint64 progress, qint64 total, const QString& message);
 
     void handleDownloadCompleted();
 
     void handleDownloadFailed(const QString& message);
 
-    void handleAtticaProviderAdded(const Attica::Provider& provider);
-
-    void getDownloadLink();
-
-    void handleGetDownloadLinkJobFinished(Attica::BaseJob* job);
-
-    void handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error) {
-        emit Command::executionFailed("Unable to connect to " + provider.toString());
-    }
-
 private:
+    void installAppImage();
+
     void createApplicationsDir();
+
+    void showInlineMessage(const QString& message);
 
     QString buildTargetPath(Attica::Content content);
 
     Attica::ProviderManager providerManager;
     Attica::Provider provider;
-
     FileDownload* fileDownload;
     QString appId;
-    QString targetPath;
-    QTextStream out;
 
-    void showInlineMessage(const QString& message);
+    QString targetPath;
+
+    QTextStream out;
 };

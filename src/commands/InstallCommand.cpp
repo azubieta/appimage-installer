@@ -1,4 +1,5 @@
 // system
+#include <fstream>
 extern "C" {
 #include <sys/ioctl.h>
 }
@@ -11,6 +12,8 @@ extern "C" {
 #include <Attica/Content>
 #include <Attica/DownloadItem>
 #include <appimage/appimage.h>
+#include <XdgUtils/DesktopEntry/DesktopEntry.h>
+#include <XdgUtils/DesktopEntry/DesktopEntryStringsValue.h>
 
 // local
 #include <gateways/FileDownload.h>
@@ -62,8 +65,14 @@ void InstallCommand::showInlineMessage(const QString& message) {
 
 void InstallCommand::handleDownloadCompleted() {
     showInlineMessage("Download completed");
+    fileDownload->deleteLater();
 
+    installAppImage();
+}
+
+void InstallCommand::installAppImage() {
     showInlineMessage("Installing");
+
     QFile targetFile(targetPath);
 
     // make it executable
@@ -73,15 +82,42 @@ void InstallCommand::handleDownloadCompleted() {
     // integrate with the desktop environment
     int res = appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
-    if (res == 0)
+    // add complementary actions
+    char* desktopFilePath = appimage_registered_desktop_file_path(targetPath.toLocal8Bit(), nullptr, false);
+
+    if (desktopFilePath != nullptr) {
+        using namespace XdgUtils::DesktopEntry;
+
+        std::ifstream ifstream(desktopFilePath);
+        DesktopEntry entry(ifstream);
+
+        std::string actionsString = static_cast<std::string>(entry["Desktop Entry/Actions"]);
+        DesktopEntryStringsValue actions(actionsString);
+
+        // Add uninstall action
+        actions.append("Uninstall");
+        entry.set("Desktop Entry/Actions", actions.dump());
+
+        entry.set("Desktop Action Uninstall/Name", "Uninstall");
+        entry.set("Desktop Action Uninstall/Icon", "application-x-trash");
+
+        std::string rmCommand = "rm -r " + targetPath.toStdString();
+        entry.set("Desktop Action Uninstall/Exec", rmCommand);
+
+        std::ofstream ofstream(desktopFilePath);
+        ofstream << entry;
+    }
+
+
+    if (res == 0) {
         showInlineMessage("Installation completed");
-    else
+    } else {
         showInlineMessage("Installation failed");
-
+    }
     out << "\n";
-    fileDownload->deleteLater();
 
-    emit Command::executionCompleted();
+
+    emit executionCompleted();
 }
 
 void InstallCommand::handleDownloadFailed(const QString& message) {
@@ -152,4 +188,8 @@ void InstallCommand::handleAtticaProviderAdded(const Attica::Provider& provider)
     InstallCommand::provider = provider;
 
     getDownloadLink();
+}
+
+void InstallCommand::handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error) {
+    emit Command::executionFailed("Unable to connect to " + provider.toString());
 }

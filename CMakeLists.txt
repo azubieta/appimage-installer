@@ -10,12 +10,14 @@ include(cmake/versioning.cmake)
 # Use GNU Install dirs
 include(GNUInstallDirs)
 
+
 # Dependencies
 # avoid collissions with existing libappimage target when used from other projects
 if(NOT TARGET libappimage)
     find_package(libappimage REQUIRED)
 endif()
 find_package(Qt5 COMPONENTS Core Network XmlPatterns Gui REQUIRED)
+find_package(XdgUtils COMPONENTS DesktopEntry REQUIRED)
 
 ## Config
 option(INSTALL_LIBAPPIMAGE "Install libAppImage as part of this project" OFF)

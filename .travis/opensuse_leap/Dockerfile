@@ -27,5 +27,12 @@ RUN zypper --non-interactive --no-gpg-checks refresh
 
 RUN zypper --non-interactive install libqt5-qtbase-devel libQt5XmlPatterns-devel attica-qt5-devel rpm-build
 
+# Install xdg-utils
+RUN git clone https://github.com/azubieta/xdg-utils-cxx.git --depth=1 /tmp/xdg_utils_cxx
+RUN cd /tmp/xdg_utils_cxx && \
+    git submodule update --init --recursive && \
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

@@ -37,6 +37,7 @@ matrix:
         - "/opt/qt510/bin/qt510-env.sh"
         - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
         - .travis/install_ecm_from_sources.sh
+        - .travis/install_xdg_utils_cxx_from_sources.sh
         - .travis/install_kf5attica_from_sources.sh
         - .travis/install_libappimage_from_sources.sh
 

@@ -7,6 +7,7 @@ extern "C" {
 // libraries
 #include <QDir>
 #include <QCoreApplication>
+#include <QProcessEnvironment>
 #include <Attica/ItemJob>
 #include <Attica/GetJob>
 #include <Attica/Content>
@@ -101,8 +102,19 @@ void InstallCommand::installAppImage() {
         entry.set("Desktop Action Remove/Name", "Remove");
         entry.set("Desktop Action Remove/Icon", "application-x-trash");
 
-        std::string rmCommand = QCoreApplication::applicationFilePath().toStdString() + " remove " + targetPath.toStdString();
-        entry.set("Desktop Action Remove/Exec", rmCommand);
+        // Build Remove Action Exec Value
+        auto systemEnvironment = QProcessEnvironment::systemEnvironment();
+
+        // Use the APPIMAGE path if the app is used as an APPIMAGE
+        QString rmCommand = systemEnvironment.value("APPIMAGE");
+
+        // Otherwise use the application file path
+        if (rmCommand.isEmpty())
+            rmCommand = QCoreApplication::applicationFilePath();
+
+        rmCommand += " remove " + targetPath;
+
+        entry.set("Desktop Action Remove/Exec", rmCommand.toStdString());
 
         std::ofstream ofstream(desktopFilePath);
         ofstream << entry;

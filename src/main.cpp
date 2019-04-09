@@ -70,7 +70,7 @@ int main(int argc, char** argv) {
         QObject::connect(command, &Command::executionCompleted, &app, &QCoreApplication::quit, Qt::QueuedConnection);
         QObject::connect(command, &Command::executionFailed, &app, &QCoreApplication::quit, Qt::QueuedConnection);
         QObject::connect(command, &Command::executionFailed, [&out](const QString& message) {
-            out << message;
+            out << message << '\n';
         });
 
         QTimer::singleShot(0, command, &Command::execute);

@@ -95,14 +95,14 @@ void InstallCommand::installAppImage() {
         DesktopEntryStringsValue actions(actionsString);
 
         // Add uninstall action
-        actions.append("Uninstall");
+        actions.append("Remove");
         entry.set("Desktop Entry/Actions", actions.dump());
 
-        entry.set("Desktop Action Uninstall/Name", "Uninstall");
-        entry.set("Desktop Action Uninstall/Icon", "application-x-trash");
+        entry.set("Desktop Action Remove/Name", "Remove");
+        entry.set("Desktop Action Remove/Icon", "application-x-trash");
 
-        std::string rmCommand = "rm -r " + targetPath.toStdString();
-        entry.set("Desktop Action Uninstall/Exec", rmCommand);
+        std::string rmCommand = QCoreApplication::applicationFilePath().toStdString() + " remove " + targetPath.toStdString();
+        entry.set("Desktop Action Remove/Exec", rmCommand);
 
         std::ofstream ofstream(desktopFilePath);
         ofstream << entry;

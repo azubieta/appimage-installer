@@ -32,6 +32,7 @@ target_link_libraries(
     PRIVATE Qt5::Network
     PRIVATE KF5::Attica
     PRIVATE libappimage
+    PRIVATE XdgUtils::DesktopEntry
 )
 
 # Install

@@ -17,6 +17,7 @@ add_executable(
     app
     main.cpp
     Command.h
+    Config.cpp
     gateways/FileDownload.cpp
     gateways/Download.cpp
     commands/SearchCommand.cpp

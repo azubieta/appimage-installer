@@ -19,7 +19,7 @@ extern "C" {
 
 
 // local
-#include <gateways/FileDownload.h>
+#include <FileDownload.h>
 #include "InstallCommand.h"
 #include <Config.h>
 

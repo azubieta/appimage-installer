@@ -19,6 +19,7 @@ endif()
 find_package(Qt5 COMPONENTS Core Network XmlPatterns Gui REQUIRED)
 find_package(XdgUtils COMPONENTS DesktopEntry REQUIRED)
 find_package(yaml-cpp REQUIRED)
+find_package(KF5Attica)
 
 ## Config
 option(INSTALL_LIBAPPIMAGE "Install libAppImage as part of this project" OFF)

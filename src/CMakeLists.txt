@@ -17,7 +17,6 @@ add_executable(
     app
     main.cpp
     Command.h
-    entities/Application.cpp
     gateways/FileDownload.cpp
     gateways/Download.cpp
     commands/SearchCommand.cpp
@@ -33,6 +32,7 @@ target_link_libraries(
     PRIVATE KF5::Attica
     PRIVATE libappimage
     PRIVATE XdgUtils::DesktopEntry
+    PRIVATE yaml-cpp
 )
 
 # Install

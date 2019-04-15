@@ -5,7 +5,6 @@
 #include <appimage/appimage.h>
 
 // local
-#include "entities/Application.h"
 #include "RemoveCommand.h"
 
 RemoveCommand::RemoveCommand(QString& target, QObject* parent) : Command(parent), target(target) {}

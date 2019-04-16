@@ -8,6 +8,7 @@ target_include_directories(settings-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 add_executable(
     appimage-user-tools-settings
     main.cpp
+    SettingsDialog.h
     SettingsDialog.cpp
     SettingsDialog.ui
 

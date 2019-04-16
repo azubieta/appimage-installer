@@ -16,6 +16,8 @@ QStringList Settings::getOCSProviders() {
     YAML::Node node = loadProvidersConfigFile();
     if (node.IsDefined())
         return getOCSProviders(node);
+
+    return QStringList();
 }
 
 void Settings::setOCSProviders(QStringList ocsProviders) {
@@ -53,6 +55,7 @@ YAML::Node Settings::loadProvidersConfigFile() {
     }
 
     qWarning() << "No providers configuration file found";
+    return YAML::Node();
 }
 
 void Settings::saveProvidersConfigFile(YAML::Node root) {

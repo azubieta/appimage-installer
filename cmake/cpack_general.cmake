@@ -4,10 +4,7 @@ set(PROJECT_VERSION ${APPIMAGE_USER_TOOL_VERSION})
 set(CPACK_GENERATOR "DEB")
 
 # make sure to only package APPIMAGE_USER_TOOL component
-set(CPACK_COMPONENTS_ALL APPIMAGE_USER_TOOL)
-# package them all in a single package, otherwise cpack would generate one package per component by default
-# https://cmake.org/cmake/help/v3.0/module/CPackComponent.html#variable:CPACK_COMPONENTS_GROUPING
-set(CPACK_COMPONENTS_GROUPING ALL_COMPONENTS_IN_ONE)
+set(CPACK_COMPONENTS_ALL APPIMAGE_USER_TOOL APPIMAGE_USER_TOOL_SETTINGS)
 
 # global options
 set(CPACK_PACKAGE_CONTACT "Alexis Lopez Zubieta")

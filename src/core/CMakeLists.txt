@@ -1,6 +1,5 @@
 add_library(
     core OBJECT
-    Config.cpp
     Download.cpp
     FileDownload.cpp
 )

@@ -21,7 +21,7 @@ extern "C" {
 // local
 #include <FileDownload.h>
 #include "InstallCommand.h"
-#include <Config.h>
+#include <Settings.h>
 
 InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout),
                                                                         fileDownload(nullptr) {
@@ -34,8 +34,8 @@ InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(
 }
 
 void InstallCommand::execute() {
-    Config config;
-    for (const QString& provider: config.getOCSProviders()) {
+    Settings settings;
+    for (const QString& provider: settings.getOCSProviders()) {
         providerManager.addProviderFile(QUrl(provider));
     }
 }

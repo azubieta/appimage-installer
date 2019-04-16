@@ -5,7 +5,7 @@
 #include <Attica/Content>
 
 // local
-#include <Config.h>
+#include <Settings.h>
 #include "SearchCommand.h"
 
 SearchCommand::SearchCommand(const QString& query) : query(query) {
@@ -17,8 +17,8 @@ SearchCommand::SearchCommand(const QString& query) : query(query) {
 }
 
 void SearchCommand::execute() {
-    Config config;
-    for (const QString& providerStr: config.getOCSProviders()) {
+    Settings settings;
+    for (const QString& providerStr: settings.getOCSProviders()) {
         providerManagers.addProviderFile(QUrl(providerStr));
     }
 }

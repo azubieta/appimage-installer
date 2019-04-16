@@ -7,12 +7,14 @@ add_executable(
     commands/ListCommand.cpp
     commands/InstallCommand.cpp
 
+    $<TARGET_OBJECTS:settings-common>
     $<TARGET_OBJECTS:core>
 )
 
 configure_module(app)
 
-target_include_directories(app PRIVATE PUBLIC $<TARGET_PROPERTY:core,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(app PUBLIC $<TARGET_PROPERTY:core,INTERFACE_INCLUDE_DIRECTORIES>)
+target_include_directories(app PUBLIC $<TARGET_PROPERTY:settings-common,INTERFACE_INCLUDE_DIRECTORIES>)
 
 target_link_libraries(
     app
@@ -23,6 +25,8 @@ target_link_libraries(
     PRIVATE XdgUtils::DesktopEntry
     PRIVATE yaml-cpp
 )
+
+add_dependencies(app core settings-common)
 
 # Install
 install(

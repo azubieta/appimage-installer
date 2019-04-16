@@ -5,6 +5,9 @@ compiler: gcc
 notifications:
   email: false
 
+services:
+  - docker
+
 addons:
   apt:
     packages:
@@ -40,6 +43,7 @@ matrix:
         - .travis/install_xdg_utils_cxx_from_sources.sh
         - .travis/install_kf5attica_from_sources.sh
         - .travis/install_libappimage_from_sources.sh
+        - .travis/install_yaml-cpp_from_sources.sh
 
       script:
         - /opt/qt510/bin/qt510-env.sh
@@ -63,7 +67,7 @@ matrix:
       script:
         - .travis/ubuntu_bionic/build_package.sh
 
-    ## Build OpenSuse 42.3 package
+    ## Build OpenSuse Leap package
     - env: PKG_BUILD=OPENSUSE_LEAP
       script:
         - .travis/opensuse_leap/build_package.sh

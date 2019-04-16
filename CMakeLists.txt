@@ -16,10 +16,13 @@ include(GNUInstallDirs)
 if(NOT TARGET libappimage)
     find_package(libappimage REQUIRED)
 endif()
-find_package(Qt5 COMPONENTS Core Network XmlPatterns Gui REQUIRED)
+find_package(Qt5 COMPONENTS Core Widgets Network XmlPatterns Gui REQUIRED)
 find_package(XdgUtils COMPONENTS DesktopEntry REQUIRED)
+find_package(yaml-cpp REQUIRED)
+find_package(KF5Attica)
 
 ## Config
+option(BUILD_SETTINGS_DIALOG "Build the settings dialog componetns" ON)
 option(INSTALL_LIBAPPIMAGE "Install libAppImage as part of this project" OFF)
 option(INSTALL_ATTICA "Install KF5 Attica as part of this project" OFF)
 

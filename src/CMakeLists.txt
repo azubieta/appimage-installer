@@ -1,7 +1,5 @@
 include(utils.cmake)
 
-find_package(KF5Attica)
-
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
@@ -13,33 +11,9 @@ if(INSTALL_LIBAPPIMAGE)
     set(CMAKE_INSTALL_RPATH "\$ORIGIN/../${CMAKE_INSTALL_LIBDIR}/${PROJECT_NAME}")
 endif()
 
-add_executable(
-    app
-    main.cpp
-    Command.h
-    gateways/FileDownload.cpp
-    gateways/Download.cpp
-    commands/SearchCommand.cpp
-    commands/RemoveCommand.cpp
-    commands/ListCommand.cpp
-    commands/InstallCommand.cpp
-)
-
-target_link_libraries(
-    app
-    PRIVATE Qt5::Core
-    PRIVATE Qt5::Network
-    PRIVATE KF5::Attica
-    PRIVATE libappimage
-    PRIVATE XdgUtils::DesktopEntry
-    PRIVATE yaml-cpp
-)
-
-# Install
-install(
-    TARGETS app
-    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT APPIMAGE_USER_TOOL
-)
+add_subdirectory(core)
+add_subdirectory(cli)
+add_subdirectory(settings)
 
 # Install libappimage with the main executable
 if(INSTALL_LIBAPPIMAGE)

@@ -47,5 +47,12 @@ RUN cd /tmp/xdg_utils_cxx && \
     make -j`nproc` install
 
 
+# Install yaml-cpp
+RUN git clone https://github.com/jbeder/yaml-cpp.git --depth=1 /tmp/yaml-cpp
+RUN cd /tmp/yaml-cpp && \
+    git submodule update --init --recursive && \
+    cmake3 . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

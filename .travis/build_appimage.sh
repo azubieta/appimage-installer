@@ -20,4 +20,5 @@ chmod +x linuxdeploy-*
 
 export LD_LIBRARY_PATH=${QT_INSTALL_PREFIX}/lib:${INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}
 
-./linuxdeploy-x86_64.AppImage --appdir=AppDir --plugin qt --output appimage
+./linuxdeploy-x86_64.AppImage --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
+

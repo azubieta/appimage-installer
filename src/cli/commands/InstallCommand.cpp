@@ -15,10 +15,13 @@ extern "C" {
 #include <appimage/appimage.h>
 #include <XdgUtils/DesktopEntry/DesktopEntry.h>
 #include <XdgUtils/DesktopEntry/DesktopEntryStringsValue.h>
+#include <yaml-cpp/yaml.h>
+
 
 // local
-#include <gateways/FileDownload.h>
+#include <FileDownload.h>
 #include "InstallCommand.h"
+#include <Settings.h>
 
 InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout),
                                                                         fileDownload(nullptr) {
@@ -31,7 +34,10 @@ InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(
 }
 
 void InstallCommand::execute() {
-    providerManager.addProviderFile(QUrl("https://appimagehub.com/ocs/providers.xml"));
+    Settings settings;
+    for (const QString& provider: settings.getOCSProviders()) {
+        providerManager.addProviderFile(QUrl(provider));
+    }
 }
 
 void InstallCommand::createApplicationsDir() {

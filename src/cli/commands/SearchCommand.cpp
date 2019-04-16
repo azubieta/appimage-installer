@@ -5,6 +5,7 @@
 #include <Attica/Content>
 
 // local
+#include <Settings.h>
 #include "SearchCommand.h"
 
 SearchCommand::SearchCommand(const QString& query) : query(query) {
@@ -16,7 +17,10 @@ SearchCommand::SearchCommand(const QString& query) : query(query) {
 }
 
 void SearchCommand::execute() {
-    providerManagers.addProviderFile(QUrl("https://appimagehub.com/ocs/providers.xml"));
+    Settings settings;
+    for (const QString& providerStr: settings.getOCSProviders()) {
+        providerManagers.addProviderFile(QUrl(providerStr));
+    }
 }
 
 void SearchCommand::handleAtticaProviderAdded(const Attica::Provider& provider) {

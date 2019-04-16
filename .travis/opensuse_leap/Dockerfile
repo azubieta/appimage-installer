@@ -1,6 +1,6 @@
-FROM opensuse:42.3
+FROM opensuse:leap
 
-RUN zypper addrepo https://download.opensuse.org/repositories/devel:tools:building/openSUSE_Leap_42.3/devel:tools:building.repo
+RUN zypper addrepo https://download.opensuse.org/repositories/devel:/tools:/building/openSUSE_Factory/devel:tools:building.repo
 RUN zypper --non-interactive --no-gpg-checks refresh
 
 # Install libappimage build dependencies
@@ -20,9 +20,9 @@ RUN cd /tmp/libappimage && \
         -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
 
-RUN zypper addrepo https://download.opensuse.org/repositories/Kernel:/tools/openSUSE_Leap_42.3/Kernel:tools.repo
-RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_Leap_42.3/KDE:Qt5.repo
-RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_42.3/KDE:Frameworks5.repo
+RUN zypper addrepo https://download.opensuse.org/repositories/Kernel:/tools/openSUSE_Leap_15.0/Kernel:tools.repo
+RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_Leap_15.0/KDE:Qt5.repo
+RUN zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_15.0/KDE:Frameworks5.repo
 RUN zypper --non-interactive --no-gpg-checks refresh
 
 RUN zypper --non-interactive install libqt5-qtbase-devel libQt5XmlPatterns-devel attica-qt5-devel rpm-build

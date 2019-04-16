@@ -6,7 +6,7 @@ RUN zypper --non-interactive --no-gpg-checks refresh
 # Install libappimage build dependencies
 RUN zypper --non-interactive install openssl-devel wget cmake git gcc-c++ \
     desktop-file-utils librsvg2-devel cairo-devel glib2-devel libarchive-devel \
-    fuse-devel libboost_filesystem1_61_0 boost-devel vim automake libtool patch
+    fuse-devel libboost_filesystem-devel-1.69.0-1.1 boost-devel vim automake libtool patch
 
 # Build and install libappimage
 RUN git clone https://github.com/AppImage/libappimage.git --depth=1 /tmp/libappimage

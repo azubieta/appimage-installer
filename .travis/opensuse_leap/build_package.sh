@@ -15,11 +15,10 @@ if  [ "$BUILD_DOCKER_IMAGE" = "ON" ]; then
     docker push ${DOCKER_IMAGE}
 fi
 
-mkdir -p ${PWD}/docker-build-release
-
 export OPENSUSE_PACKAGE_REQUIRES="libboost_filesystem1_61_0, libarchive13, cairo, librsvg2"
 export OPENSUSE_PACKAGE_PROVIDES="libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)"
 
+mkdir -p docker-build-release
 sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build ${DOCKER_IMAGE} /bin/bash -c "\
         cmake /source \
             -DINSTALL_LIBAPPIMAGE=On\

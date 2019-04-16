@@ -1,4 +1,4 @@
-FROM opensuse:leap
+FROM opensuse/tumbleweed
 
 RUN zypper addrepo https://download.opensuse.org/repositories/devel:/tools:/building/openSUSE_Factory/devel:tools:building.repo
 RUN zypper --non-interactive --no-gpg-checks refresh

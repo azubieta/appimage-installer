@@ -8,14 +8,16 @@ RUN git clone https://github.com/azubieta/xdg-utils-cxx.git --depth=1 /tmp/xdg_u
 RUN cd /tmp/xdg_utils_cxx && \
     git submodule update --init --recursive && \
     cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
-    make -j`nproc` install
+    make -j`nproc` install && \
+    cd / && rm -rf /tmp/xdg_utils_cxx
 
 # Install yaml-cpp
 RUN git clone https://github.com/jbeder/yaml-cpp.git --depth=1 /tmp/yaml-cpp
 RUN cd /tmp/yaml-cpp && \
     git submodule update --init --recursive && \
     cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
-    make -j`nproc` install
+    make -j`nproc` install && \
+    cd / && rm -rf /tmp/yaml-cpp
 
 
 RUN useradd build

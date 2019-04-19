@@ -74,6 +74,7 @@ matrix:
 
     ## Build ARCH package
     - env: PKG_BUILD=ARCH
+      dist: xenial
       script:
         - .travis/arch/build_package.sh
 

@@ -16,7 +16,7 @@ extern "C" {
 #include <XdgUtils/DesktopEntry/DesktopEntry.h>
 #include <XdgUtils/DesktopEntry/DesktopEntryStringsValue.h>
 #include <yaml-cpp/yaml.h>
-
+#include <QTextStream>
 
 // local
 #include <FileDownload.h>
@@ -163,41 +163,83 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
         QString architecture = QSysInfo::buildCpuArchitecture().replace("_", "-");
         qDebug() << "Looking for " << architecture << " AppImages";
         static QString archTag = "application##architecture=" + architecture;
+        static QString pkgTypeTag = "application##packagetype=appimage";
 
-        QUrl downloadLink;
+        QList<Attica::DownloadDescription> compatibleDownloads;
         auto list = content.downloadUrlDescriptions();
 
         for (const auto& downloadDescription : list) {
-            if (downloadDescription.tags().contains("application##packagetype=appimage") &&
-                downloadDescription.tags().contains(archTag)) {
+            if (downloadDescription.tags().contains(pkgTypeTag) &&
+                (!downloadDescription.tags().contains("application##architecture=") ||
+                 downloadDescription.tags().contains(archTag))) {
 
-                downloadLink = downloadDescription.link();
-                targetPath = buildTargetPath(content);
-
-                break;
+                compatibleDownloads << downloadDescription;
             }
         }
 
-        if (downloadLink.isEmpty()) {
+        if (compatibleDownloads.isEmpty()) {
             emit executionFailed("Unable to find a download for " + appId);
         } else {
-            createApplicationsDir();
+            targetPath = buildTargetPath(content);
 
-            fileDownload = new FileDownload(downloadLink, targetPath, this);
-            fileDownload->setProgressNotificationsEnabled(true);
+            int userPick = 0;
+            if (compatibleDownloads.size() != 1)
+                userPick = askWhichFileDownload(compatibleDownloads);
+            else
+                userPick = 1;
 
-            connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,
-                    Qt::QueuedConnection);
-            connect(fileDownload, &Download::completed, this, &InstallCommand::handleDownloadCompleted,
-                    Qt::QueuedConnection);
-            connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed,
-                    Qt::QueuedConnection);
-
-            out << "Downloading " << appId << " from " << downloadLink.toString() << "\n";
-            fileDownload->start();
+            if (userPick == -1) {
+                emit Command::executionCompleted();
+                return;
+            } else {
+                const QUrl link = compatibleDownloads.at(userPick - 1).link();
+                startFileDownload(link);
+            }
         }
     } else
         emit executionFailed("Unable to resolve the application download link.");
+}
+
+int InstallCommand::askWhichFileDownload(const QList<Attica::DownloadDescription>& compatibleDownloads) {
+    int userPick;
+    out << "Available AppImage files:\n";
+    for (int i = 1; i <= compatibleDownloads.size(); i++) {
+        const auto& downloadDescription = compatibleDownloads.at(i - 1);
+        out << i << "- " << downloadDescription.name() << "\n";
+    }
+
+    QTextStream in(stdin);
+    while (userPick <= 0 || userPick > compatibleDownloads.size()) {
+        out << "Enter the file number to download or 'x' to exit: ";
+        out.flush();
+
+        QString line = in.readLine();
+        if (line.startsWith("x"))
+            return -1;
+
+        bool isInt = false;
+        userPick = line.toInt(&isInt);
+        if (!isInt || userPick <= 0 || userPick > compatibleDownloads.size())
+            out << "Invalid option\n";
+    }
+    return userPick;
+}
+
+void InstallCommand::startFileDownload(const QUrl& downloadLink) {
+    createApplicationsDir();
+
+    fileDownload = new FileDownload(downloadLink, targetPath, this);
+    fileDownload->setProgressNotificationsEnabled(true);
+
+    connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,
+            Qt::QueuedConnection);
+    connect(fileDownload, &Download::completed, this, &InstallCommand::handleDownloadCompleted,
+            Qt::QueuedConnection);
+    connect(fileDownload, &Download::stopped, this, &InstallCommand::handleDownloadFailed,
+            Qt::QueuedConnection);
+
+    out << "Downloading " << appId << " from " << downloadLink.toString() << "\n";
+    fileDownload->start();
 }
 
 void InstallCommand::handleAtticaProviderAdded(const Attica::Provider& provider) {

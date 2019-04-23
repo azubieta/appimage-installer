@@ -5,6 +5,7 @@
 #include <QString>
 #include <Attica/ProviderManager>
 #include <Attica/ListJob>
+#include <Attica/DownloadDescription>
 
 // local
 #include <Command.h>
@@ -59,4 +60,8 @@ private:
 
     QTextStream out;
     QStringList ocsProvidersList;
+
+    void startFileDownload(const QUrl& downloadLink);
+
+    int askWhichFileDownload(const QList<Attica::DownloadDescription>& compatibleDownloads);
 };

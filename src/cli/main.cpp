@@ -47,7 +47,7 @@ int main(int argc, char** argv) {
         const char* msgPrefix;
 
         // Ignore debug unless in verbose mode
-        if (!verboseMode && type < QtInfoMsg)
+        if (!verboseMode && type == QtDebugMsg)
             return;
 
         switch (type) {

@@ -5,7 +5,6 @@
 #include <Attica/Content>
 
 // local
-#include <Settings.h>
 #include "SearchCommand.h"
 
 SearchCommand::SearchCommand(const QString& query) : query(query) {
@@ -17,8 +16,7 @@ SearchCommand::SearchCommand(const QString& query) : query(query) {
 }
 
 void SearchCommand::execute() {
-    Settings settings;
-    for (const QString& providerStr: settings.getOCSProviders()) {
+    for (const QString& providerStr: ocsProvidersList) {
         providerManagers.addProviderFile(QUrl(providerStr));
     }
 }
@@ -74,5 +72,9 @@ void SearchCommand::handleSearchContentsJobFinished(Attica::BaseJob* job) {
 
 void SearchCommand::handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error) {
     emit Command::executionFailed("Unable to connect to " + provider.toString());
+}
+
+void SearchCommand::setOcsProvidersList(QStringList list) {
+    ocsProvidersList = list;
 }
 

@@ -16,6 +16,8 @@ Q_OBJECT
 public:
     InstallCommand(const QString& appId, QObject* parent = nullptr);
 
+    void setOcsProvidersList(QStringList list);
+
 public slots:
 
     void execute() override;
@@ -56,4 +58,5 @@ private:
     QString targetPath;
 
     QTextStream out;
+    QStringList ocsProvidersList;
 };

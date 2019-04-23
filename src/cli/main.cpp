@@ -8,6 +8,7 @@
 #include "commands/InstallCommand.h"
 #include "commands/ListCommand.h"
 #include "commands/RemoveCommand.h"
+#include "settings/Settings.h"
 
 int main(int argc, char** argv) {
     QCoreApplication app(argc, argv);
@@ -33,14 +34,24 @@ int main(int argc, char** argv) {
 
     QTextStream out(stdout);
 
-    Command* command = nullptr;
+    Settings settings;
+    Command* abstractCommand = nullptr;
     if (!args.isEmpty() && args.first() == "search") {
         args.pop_front();
         if (args.empty())
             out << "Missing search query. Example:\n"
                    "\tapp search firefox\n\n";
-        else
-            command = new SearchCommand(args.first());
+        else {
+            QStringList ocsProvidersList = settings.getOCSProviders();
+            if (!ocsProvidersList.empty()) {
+                auto command = new SearchCommand(args.first());
+                command->setOcsProvidersList(ocsProvidersList);
+
+                abstractCommand = command;
+            } else {
+                exit(1);
+            }
+        }
     }
 
     if (!args.isEmpty() && args.first() == "install") {
@@ -48,12 +59,20 @@ int main(int argc, char** argv) {
         if (args.empty())
             out << "Missing store id. Example:\n"
                    "\tapp get 1230\n\n";
-        else
-            command = new InstallCommand(args.first());
+        else {
+            QStringList ocsProvidersList = settings.getOCSProviders();
+            if (!ocsProvidersList.empty()) {
+                auto command = new InstallCommand(args.first());
+                command->setOcsProvidersList(ocsProvidersList);
+                abstractCommand = command;
+            } else {
+                exit(1);
+            }
+        }
     }
 
     if (!args.isEmpty() && args.first() == "list")
-        command = new ListCommand();
+        abstractCommand = new ListCommand();
 
     if (!args.isEmpty() && args.first() == "remove") {
         args.pop_front();
@@ -61,19 +80,21 @@ int main(int argc, char** argv) {
             out << "Missing application id. Example:\n"
                    "\tapp remove firefox\n\n";
         else
-            command = new RemoveCommand(args.first());
+            abstractCommand = new RemoveCommand(args.first());
     }
 
     if (!args.isEmpty() && args.first() == "update")
         out << "ERROR: Updates aren't supported yet. Use AppImageUpate in the meanwhile.\n";
-    if (command) {
-        QObject::connect(command, &Command::executionCompleted, &app, &QCoreApplication::quit, Qt::QueuedConnection);
-        QObject::connect(command, &Command::executionFailed, &app, &QCoreApplication::quit, Qt::QueuedConnection);
-        QObject::connect(command, &Command::executionFailed, [&out](const QString& message) {
+    if (abstractCommand) {
+        QObject::connect(abstractCommand, &Command::executionCompleted, &app, &QCoreApplication::quit,
+                         Qt::QueuedConnection);
+        QObject::connect(abstractCommand, &Command::executionFailed, &app, &QCoreApplication::quit,
+                         Qt::QueuedConnection);
+        QObject::connect(abstractCommand, &Command::executionFailed, [&out](const QString& message) {
             out << message << '\n';
         });
 
-        QTimer::singleShot(0, command, &Command::execute);
+        QTimer::singleShot(0, abstractCommand, &Command::execute);
 
         return QCoreApplication::exec();
     } else {

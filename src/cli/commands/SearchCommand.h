@@ -12,6 +12,8 @@ Q_OBJECT
 public:
     explicit SearchCommand(const QString& query);
 
+    void setOcsProvidersList(QStringList list);
+
 public slots:
 
     void execute() override;
@@ -38,4 +40,5 @@ protected:
     QString query;
 
     QStringList applicationsIds;
+    QStringList ocsProvidersList;
 };

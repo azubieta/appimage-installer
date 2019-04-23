@@ -21,7 +21,6 @@ extern "C" {
 // local
 #include <FileDownload.h>
 #include "InstallCommand.h"
-#include <Settings.h>
 
 InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(parent), appId(appId), out(stdout),
                                                                         fileDownload(nullptr) {
@@ -34,8 +33,7 @@ InstallCommand::InstallCommand(const QString& appId, QObject* parent) : Command(
 }
 
 void InstallCommand::execute() {
-    Settings settings;
-    for (const QString& provider: settings.getOCSProviders()) {
+    for (const QString& provider: ocsProvidersList) {
         providerManager.addProviderFile(QUrl(provider));
     }
 }
@@ -210,4 +208,8 @@ void InstallCommand::handleAtticaProviderAdded(const Attica::Provider& provider)
 
 void InstallCommand::handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error) {
     emit Command::executionFailed("Unable to connect to " + provider.toString());
+}
+
+void InstallCommand::setOcsProvidersList(QStringList list) {
+    ocsProvidersList = list;
 }

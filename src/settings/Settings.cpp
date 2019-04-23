@@ -40,10 +40,11 @@ void Settings::setOCSProviders(QStringList ocsProviders) {
  * @return root node of the configuration file
  */
 YAML::Node Settings::loadProvidersConfigFile() {
-    if (QFile::exists("appimage-providers.yaml"))
-        return YAML::LoadFile("appimage-providers.yaml");
+    QStringList configLocations;
+    configLocations.append(".");
+    configLocations.append(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation));
+    configLocations.append("/etc");
 
-    QStringList configLocations = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation);
     for (const QString& location: configLocations) {
         QString filePath = location + "/appimage-providers.yaml";
         qDebug() << "trying providers configuration file: " + filePath;

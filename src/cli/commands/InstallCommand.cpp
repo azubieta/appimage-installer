@@ -44,8 +44,8 @@ void InstallCommand::createApplicationsDir() {
 }
 
 QString InstallCommand::buildTargetPath(Attica::Content content) {
-    QString fileName = content.id() + '-' + content.name().replace(" ", "_") + '-' + content.version() + '-' +
-                       content.updated().toString("yyyyMMdd-HH:mm");
+    QString fileName = content.name().replace(" ", "_") + '-' + content.version() + '-' +
+                       content.updated().toString("yyyyMMdd-HH:mm") + "__" + content.id();
     return QDir::homePath() + "/Applications/" + fileName.toLower() + ".AppImage";
 }
 

@@ -1,0 +1,26 @@
+stages:
+  - build
+  - test
+
+build:debian_buster_pkg:
+  image: azubieta90/appimage-user-tool-build:debian-buster
+  stage: build
+  script:
+    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
+    - make -j`nproc`
+    - cpack -G DEB -G DEB -R 0.1.2-debian-buster
+  artifacts:
+    paths:
+    - appimage-user-tool*.deb
+
+test:debian_buster_pkg:
+  image: debian:buster
+  stage: test
+  dependencies:
+    - build:debian_buster_pkg
+
+  script:
+    - apt -y -qq update && apt -y -qq install ./appimage-user-tool*
+    - app --help
+
+

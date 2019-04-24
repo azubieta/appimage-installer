@@ -38,7 +38,7 @@ void RemoveCommand::execute() {
 
     if (removed) {
         QTextStream out(stdout);
-        out << "Application removed: " + target;
+        out << "Application removed: " + target << "\n";
 
         emit Command::executionCompleted();
     } else

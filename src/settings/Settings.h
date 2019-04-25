@@ -10,12 +10,12 @@ public:
 
     QStringList getOCSProviders();
 
-    void setOCSProviders(QStringList ocsProviders);
+    void setOCSProviders(const QStringList& ocsProviders);
 
 private:
     YAML::Node loadProvidersConfigFile();
 
-    void saveProvidersConfigFile(YAML::Node root);
+    void saveProvidersConfigFile(const YAML::Node& root);
 
     QStringList getOCSProviders(YAML::Node root);
 

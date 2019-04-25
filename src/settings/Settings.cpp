@@ -9,8 +9,7 @@
 // local
 #include "Settings.h"
 
-Settings::Settings() {
-}
+Settings::Settings() = default;
 
 QStringList Settings::getOCSProviders() {
     YAML::Node node = loadProvidersConfigFile();
@@ -20,7 +19,7 @@ QStringList Settings::getOCSProviders() {
     return QStringList();
 }
 
-void Settings::setOCSProviders(QStringList ocsProviders) {
+void Settings::setOCSProviders(const QStringList& ocsProviders) {
     YAML::Node providersRoot = loadProvidersConfigFile();
 
     setOCSProviders(providersRoot, ocsProviders);
@@ -44,6 +43,7 @@ YAML::Node Settings::loadProvidersConfigFile() {
     configLocations.append(".");
     configLocations.append(QStandardPaths::standardLocations(QStandardPaths::ConfigLocation));
     configLocations.append("/etc");
+    configLocations.append(qgetenv("APPDIR") + "/etc");
 
     for (const QString& location: configLocations) {
         QString filePath = location + "/appimage-providers.yaml";
@@ -59,9 +59,9 @@ YAML::Node Settings::loadProvidersConfigFile() {
     return YAML::Node();
 }
 
-void Settings::saveProvidersConfigFile(YAML::Node root) {
+void Settings::saveProvidersConfigFile(const YAML::Node& root) {
     QStringList configLocations = QStandardPaths::standardLocations(QStandardPaths::ConfigLocation);
-    if (configLocations.size() > 0) {
+    if (configLocations.empty()) {
         QString filePath = configLocations.first() + "/appimage-providers.yaml";
         std::ofstream fout(filePath.toStdString());
 

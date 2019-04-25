@@ -2,7 +2,7 @@
 projectname=appimage-user-tool
 
 pkgname=appimage-user-tool
-pkgver=0.1.2
+pkgver=0.1.3
 pkgrel=1
 epoch=
 pkgdesc="AppImageHub CLI client"

@@ -43,13 +43,17 @@ void InstallCommand::createApplicationsDir() {
     home.mkdir("Applications");
 }
 
-QString InstallCommand::buildTargetPath(const QString& fileName, const QString& ocsId) {
-    QString newFileName = fileName;
-    newFileName.replace(".AppImage", "__" + ocsId + ".AppImage");
-    newFileName.replace(".appimage", "__" + ocsId + ".AppImage");
-    newFileName.replace(".appImage", "__" + ocsId + ".AppImage");
+QString InstallCommand::buildTargetPath(const Attica::Content& content, const Attica::DownloadDescription& download) {
+    QStringList postfixParts = {content.id(), content.name().replace(" ", "_"), content.version(),
+                                QString::number(content.updated().toSecsSinceEpoch())};
+    QString fileNamePostfix = "__" + postfixParts.join("-") + ".AppImage";
 
-    return QDir::homePath() + "/Applications/" + newFileName;
+    QString fileName = download.name();
+    for (const QString& extension: {".AppImage", ".appimage", ".appImage"})
+        fileName.replace(extension, fileNamePostfix);
+
+
+    return QDir::homePath() + "/Applications/" + fileName;
 }
 
 void InstallCommand::handleDownloadProgress(qint64, qint64, const QString& message) {
@@ -198,7 +202,7 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
             }
 
             const Attica::DownloadDescription& download = compatibleDownloads.at(downloadIdx);
-            targetPath = buildTargetPath(download.name(), content.id());
+            targetPath = buildTargetPath(content, download);
             startFileDownload(download.link());
         }
     } else

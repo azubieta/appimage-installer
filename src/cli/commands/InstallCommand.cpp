@@ -43,10 +43,13 @@ void InstallCommand::createApplicationsDir() {
     home.mkdir("Applications");
 }
 
-QString InstallCommand::buildTargetPath(Attica::Content content) {
-    QString fileName = content.name().replace(" ", "_") + '-' + content.version() + '-' +
-                       content.updated().toString("yyyyMMdd-HH:mm") + "__" + content.id();
-    return QDir::homePath() + "/Applications/" + fileName.toLower() + ".AppImage";
+QString InstallCommand::buildTargetPath(const QString& fileName, const QString& ocsId) {
+    QString newFileName = fileName;
+    newFileName.replace(".AppImage", "__" + ocsId + ".AppImage");
+    newFileName.replace(".appimage", "__" + ocsId + ".AppImage");
+    newFileName.replace(".appImage", "__" + ocsId + ".AppImage");
+
+    return QDir::homePath() + "/Applications/" + newFileName;
 }
 
 void InstallCommand::handleDownloadProgress(qint64, qint64, const QString& message) {
@@ -71,6 +74,8 @@ void InstallCommand::showInlineMessage(const QString& message) {
 void InstallCommand::handleDownloadCompleted() {
     showInlineMessage("Download completed");
     fileDownload->deleteLater();
+
+    QFile::rename(targetPath + ".part", targetPath);
 
     installAppImage();
 }
@@ -140,7 +145,7 @@ void InstallCommand::handleDownloadFailed(const QString& message) {
     showInlineMessage("Download failed: " + message);
 
     // Clean up
-    QFile::remove(targetPath);
+    QFile::remove(targetPath + ".part");
     fileDownload->deleteLater();
 
     emit executionFailed(message);
@@ -180,28 +185,28 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
         if (compatibleDownloads.isEmpty()) {
             emit executionFailed("Unable to find a download for " + appId);
         } else {
-            targetPath = buildTargetPath(content);
 
-            int userPick = 0;
-            if (compatibleDownloads.size() != 1)
-                userPick = askWhichFileDownload(compatibleDownloads);
-            else
-                userPick = 1;
+            // Default to the first compatible download
+            int downloadIdx = 0;
+            if (compatibleDownloads.size() > 1)
+                downloadIdx = askWhichFileDownload(compatibleDownloads);
 
-            if (userPick == -1) {
+            // -1 means that the user want's to exit
+            if (downloadIdx == -1) {
                 emit Command::executionCompleted();
                 return;
-            } else {
-                const QUrl link = compatibleDownloads.at(userPick - 1).link();
-                startFileDownload(link);
             }
+
+            const Attica::DownloadDescription& download = compatibleDownloads.at(downloadIdx);
+            targetPath = buildTargetPath(download.name(), content.id());
+            startFileDownload(download.link());
         }
     } else
         emit executionFailed("Unable to resolve the application download link.");
 }
 
 int InstallCommand::askWhichFileDownload(const QList<Attica::DownloadDescription>& compatibleDownloads) {
-    int userPick;
+    int userPick = 0;
     out << "Available AppImage files:\n";
     for (int i = 1; i <= compatibleDownloads.size(); i++) {
         const auto& downloadDescription = compatibleDownloads.at(i - 1);
@@ -222,13 +227,14 @@ int InstallCommand::askWhichFileDownload(const QList<Attica::DownloadDescription
         if (!isInt || userPick <= 0 || userPick > compatibleDownloads.size())
             out << "Invalid option\n";
     }
-    return userPick;
+    // Download options are presented starting at 1 but the array actually starts at 0
+    return userPick - 1;
 }
 
 void InstallCommand::startFileDownload(const QUrl& downloadLink) {
     createApplicationsDir();
 
-    fileDownload = new FileDownload(downloadLink, targetPath, this);
+    fileDownload = new FileDownload(downloadLink, targetPath + ".part", this);
     fileDownload->setProgressNotificationsEnabled(true);
 
     connect(fileDownload, &Download::progress, this, &InstallCommand::handleDownloadProgress,

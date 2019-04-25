@@ -2,6 +2,7 @@ stages:
   - build
   - test
 
+## Debian Buster Package
 build:debian_buster_pkg:
   image: azubieta90/appimage-user-tool-build:debian-buster
   stage: build
@@ -24,3 +25,22 @@ test:debian_buster_pkg:
     - app --help
 
 
+# Arch package
+build:arch_pkg:
+  image: azubieta90/appimage-user-tool-build:arch
+  stage: build
+  script:
+    - mkdir build
+    - cp .travis/arch/PKGBUILD build
+    - cd build && makepkg
+  artifacts:
+    paths:
+      - build/appimage-user-tool*.pkg
+
+
+test:arch_pkg:
+  image: archlinux/base
+  stage: test
+  script:
+    - pacman -Sp --noconfirm build/appimage-user-tool*.pkg
+    - app --help

@@ -12,7 +12,7 @@ build:debian_buster_pkg:
     - cpack -G DEB -G DEB -R 0.1.2-debian-buster
   artifacts:
     paths:
-    - appimage-user-tool*.deb
+      - appimage-user-tool*.deb
 
 test:debian_buster_pkg:
   image: debian:buster
@@ -25,6 +25,27 @@ test:debian_buster_pkg:
     - app --help
 
 
+## Centos 7 Package
+build:centos_7_pkg:
+  image: azubieta90/appimage-user-tool-build:centos-7
+  stage: build
+  script:
+    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_USER_TOOL_V_SUFFIX='-centos-7'
+    - make -j`nproc`
+    - cpack3 -G DEB -G RPM
+  artifacts:
+    paths:
+      - appimage-user-tool*.rpm
+
+test:centos_7_pkg:
+  image: centos:7
+  stage: test
+  dependencies:
+    - build:centos_7_pkg
+
+  script:
+    - yum -y update && yum install -y ./appimage-user-tool*.rpm
+    - app --help
 
 # Arch package
 #build:arch_pkg:

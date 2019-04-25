@@ -68,6 +68,32 @@ test:centos_7_pkg:
     - yum -y update && yum install -y ./appimage-user-tool*.rpm
     - app --help
 
+## OpenSuse Leap Package
+build:opensue_leap_pkg:
+  image: azubieta90/appimage-user-tool-build:opensuse-leap
+  stage: build
+  script:
+    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_USER_TOOL_V_SUFFIX='-centos-7'
+    - make -j`nproc`
+    - cpack -G DEB -G RPM
+  artifacts:
+    paths:
+      - appimage-user-tool*.rpm
+
+test:opensue_leap_pkg:
+  image: opensuse/leap:15
+  stage: test
+  dependencies:
+    - build:opensue_leap_pkg
+
+  script:
+    - zypper addrepo https://download.opensuse.org/repositories/Kernel:/tools/openSUSE_Leap_15.0/Kernel:tools.repo
+    - zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_Leap_15.0/KDE:Qt5.repo
+    - zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_15.0/KDE:Frameworks5.repo
+    - zypper --non-interactive --no-gpg-checks refresh
+    - zypper --non-interactive --no-gpg-checks install ./appimage-user-tool*.rpm
+    - app --help
+
 # Arch package
 #build:arch_pkg:
 #  image: azubieta90/appimage-user-tool-build:arch

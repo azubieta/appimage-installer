@@ -49,7 +49,7 @@ private:
 
     void showInlineMessage(const QString& message);
 
-    QString buildTargetPath(const QString& fileName, const QString& ocsId);
+    QString buildTargetPath(const Attica::Content& content, const Attica::DownloadDescription& download);
 
     Attica::ProviderManager providerManager;
     Attica::Provider provider;

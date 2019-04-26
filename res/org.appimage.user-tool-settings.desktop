@@ -1,9 +1,9 @@
 [Desktop Entry]
 Version=1.0
 Type=Application
-Name=appimage-user-tools-settings
+Name=appimage-cli-tool-settings
 Comment=Configure AppImage providers
-TryExec=appimage-user-tools-settings
-Exec=appimage-user-tools-settings %F
+TryExec=appimage-cli-tool-settings
+Exec=appimage-cli-tool-settings %F
 Icon=appimage_logo
 Categories=Utility;

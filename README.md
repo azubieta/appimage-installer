@@ -1,4 +1,4 @@
-# appimage-user-tool
+# appimage-cli-tool
 
 CLI client for <http://www.appimagehub.com>. Allows to search, install, remove and update applications using the AppImage 
 package format.

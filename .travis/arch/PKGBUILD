@@ -1,7 +1,7 @@
 # Maintainer: Alexis Lopez Zubieta <contact@azubieta.net>
-projectname=appimage-user-tool
+projectname=appimage-cli-tool
 
-pkgname=appimage-user-tool
+pkgname=appimage-cli-tool
 pkgver=0.1.4
 pkgrel=1
 epoch=

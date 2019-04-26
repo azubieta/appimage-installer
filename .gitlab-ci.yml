@@ -12,7 +12,7 @@ build:debian_buster_pkg:
     - cpack -G DEB -G DEB -R 0.1.4-debian-buster
   artifacts:
     paths:
-      - appimage-user-tool*.deb
+      - appimage-cli-tool*.deb
 
 test:debian_buster_pkg:
   image: debian:buster
@@ -21,7 +21,7 @@ test:debian_buster_pkg:
     - build:debian_buster_pkg
 
   script:
-    - apt -y -qq update && apt -y -qq install ./appimage-user-tool*
+    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
     - app --help
 
 ## Ubuntu Bionic Package
@@ -34,7 +34,7 @@ build:ubuntu_bionic_pkg:
     - cpack -G DEB -G DEB -R 0.1.4-ubuntu-bionic
   artifacts:
     paths:
-      - appimage-user-tool*.deb
+      - appimage-cli-tool*.deb
 
 test:ubuntu_bionic_pkg:
   image: ubuntu:bionic
@@ -43,7 +43,7 @@ test:ubuntu_bionic_pkg:
     - build:ubuntu_bionic_pkg
 
   script:
-    - apt -y -qq update && apt -y -qq install ./appimage-user-tool*
+    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
     - app --help
 
 ## Centos 7 Package
@@ -51,12 +51,12 @@ build:centos_7_pkg:
   image: azubieta90/appimage-user-tool-build:centos-7
   stage: build
   script:
-    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_USER_TOOL_V_SUFFIX='-centos-7'
+    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
     - make -j`nproc`
     - cpack3 -G DEB -G RPM
   artifacts:
     paths:
-      - appimage-user-tool*.rpm
+      - appimage-cli-tool*.rpm
 
 test:centos_7_pkg:
   image: centos:7
@@ -65,7 +65,7 @@ test:centos_7_pkg:
     - build:centos_7_pkg
 
   script:
-    - yum -y update && yum install -y ./appimage-user-tool*.rpm
+    - yum -y update && yum install -y ./appimage-cli-tool*.rpm
     - app --help
 
 ## OpenSuse Leap Package
@@ -73,12 +73,12 @@ build:opensue_leap_pkg:
   image: azubieta90/appimage-user-tool-build:opensuse-leap
   stage: build
   script:
-    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_USER_TOOL_V_SUFFIX='-centos-7'
+    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
     - make -j`nproc`
     - cpack -G DEB -G RPM
   artifacts:
     paths:
-      - appimage-user-tool*.rpm
+      - appimage-cli-tool*.rpm
 
 test:opensue_leap_pkg:
   image: opensuse/leap:15
@@ -91,7 +91,7 @@ test:opensue_leap_pkg:
     - zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_Leap_15.0/KDE:Qt5.repo
     - zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_15.0/KDE:Frameworks5.repo
     - zypper --non-interactive --no-gpg-checks refresh
-    - zypper --non-interactive --no-gpg-checks install ./appimage-user-tool*.rpm
+    - zypper --non-interactive --no-gpg-checks install ./appimage-cli-tool*.rpm
     - app --help
 
 # Arch package
@@ -104,14 +104,14 @@ test:opensue_leap_pkg:
 #    - cd build && makepkg
 #  artifacts:
 #    paths:
-#      - build/appimage-user-tool*.pkg
+#      - build/appimage-cli-tool*.pkg
 #
 #
 #test:arch_pkg:
 #  image: archlinux/base
 #  stage: test
 #  script:
-#    - pacman -Sp --noconfirm build/appimage-user-tool*.pkg
+#    - pacman -Sp --noconfirm build/appimage-cli-tool*.pkg
 #    - app --help
 #  dependencies:
 #    - build:arch_pkg

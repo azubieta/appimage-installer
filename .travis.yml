@@ -49,7 +49,7 @@ matrix:
         - /opt/qt510/bin/qt510-env.sh
         - export SOURCES_DIR=${PWD}
         - mkdir -p ${PROJECT_BUILD_DIR}
-        - cd ${PROJECT_BUILD_DIR}; ${SOURCES_DIR}/.travis/build_appimage-user-tool.sh
+        - cd ${PROJECT_BUILD_DIR}; ${SOURCES_DIR}/.travis/build_appimage-cli-tool.sh
         - cd ${PROJECT_BUILD_DIR}; ${SOURCES_DIR}/.travis/build_appimage.sh
 
     ## Build Debian buster package
@@ -83,7 +83,7 @@ after_success:
   # make sure only pushes to rewrite create a new release, otherwise pretend PR and upload to transfer.sh
   - if [ "$TRAVIS_BRANCH" != "$TRAVIS_TAG" ] && [ "$TRAVIS_BRANCH" != "master" ]; then export TRAVIS_EVENT_TYPE=pull_request; fi
   - wget -c https://github.com/probonopd/uploadtool/raw/master/upload.sh
-  - bash upload.sh appimage-user-tool*.AppImage*
-  - bash upload.sh docker-build-release/appimage-user-tool*.rpm
-  - bash upload.sh docker-build-release/appimage-user-tool*.deb
-  - bash upload.sh docker-build-release/appimage-user-tool*.pkg.tar.xz
+  - bash upload.sh appimage-cli-tool*.AppImage*
+  - bash upload.sh docker-build-release/appimage-cli-tool*.rpm
+  - bash upload.sh docker-build-release/appimage-cli-tool*.deb
+  - bash upload.sh docker-build-release/appimage-cli-tool*.pkg.tar.xz

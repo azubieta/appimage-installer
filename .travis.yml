@@ -14,43 +14,33 @@ addons:
       - realpath wget git realpath
 matrix:
   include:
-    ## Build AppImage
-    - env: QT_INSTALL_PREFIX=/opt/qt510 INSTALL_PREFIX=/usr PROJECT_BUILD_DIR=/tmp/build QT_SELECT=qt5
-
+    - env: INSTALL_PREFIX=/usr PROJECT_BUILD_DIR=/tmp/build QT_SELECT=qt5
       addons:
         apt:
-          sources:
-            - sourceline: ppa:beineri/opt-qt-5.10.1-trusty
           packages:
             - realpath
             - wget
             - git
-            - realpath
             - cmake
             - desktop-file-utils
-            - librsvg2-bin
-            - libcairo2-dev
             - libglib2.0-dev
-            - libarchive-dev
-            - libfuse-dev
-            - liblzma-dev
-            - qt510-meta-minimal
+            - python-pip
 
       install:
-        - "/opt/qt510/bin/qt510-env.sh"
-        - sudo update-alternatives --install /usr/bin/qmake qmake /opt/qt510/bin/qmake 1
-        - .travis/install_ecm_from_sources.sh
-        - .travis/install_xdg_utils_cxx_from_sources.sh
-        - .travis/install_kf5attica_from_sources.sh
-        - .travis/install_libappimage_from_sources.sh
-        - .travis/install_yaml-cpp_from_sources.sh
+        - sudo pip install conan --upgrade
+        - sudo pip install conan_package_tools
+        - conan user
+        - conan remote add appimage-community https://api.bintray.com/conan/appimage-conan-community/public-conan --insert=0
+        - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+        - conan remote add azubieta https://api.bintray.com/conan/azubieta/AppImage
 
       script:
-        - /opt/qt510/bin/qt510-env.sh
-        - export SOURCES_DIR=${PWD}
-        - mkdir -p ${PROJECT_BUILD_DIR}
-        - cd ${PROJECT_BUILD_DIR}; ${SOURCES_DIR}/.travis/build_appimage-cli-tool.sh
-        - cd ${PROJECT_BUILD_DIR}; ${SOURCES_DIR}/.travis/build_appimage.sh
+        - mkdir build && cd build
+        - conan install .. --build missing -s cppstd=11 -s compiler.libcxx=libstdc++11
+        - cmake -DUSE_CONAN=ON .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
+        - make install -j`nproc` DESTDIR=AppDir
+        - . activate_run.sh
+        - INSTALL_PREFIX=" " ../.travis/build_appimage.sh
 
     ## Build Debian buster package
     - env: PKG_BUILD=DEBIAN_BUSTER

@@ -111,7 +111,7 @@ build:opensue_leap_pkg:
   image: azubieta90/appimage-user-tool-build:opensuse-leap
   stage: build
   script:
-    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
+    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-opensue-leap'
     - make -j`nproc`
     - cpack -G DEB -G RPM
   artifacts:

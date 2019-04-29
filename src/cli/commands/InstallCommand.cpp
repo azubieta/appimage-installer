@@ -44,8 +44,9 @@ void InstallCommand::createApplicationsDir() {
 }
 
 QString InstallCommand::buildTargetPath(const Attica::Content& content, const Attica::DownloadDescription& download) {
+    const QDateTime contentUpdateDate = content.updated();
     QStringList postfixParts = {content.id(), content.name().replace(" ", "_"), content.version(),
-                                QString::number(content.updated().toSecsSinceEpoch())};
+                                contentUpdateDate.toString("yyyy-MM-dd-HH-mm")};
     QString fileNamePostfix = "__" + postfixParts.join("-") + ".AppImage";
 
     QString fileName = download.name();

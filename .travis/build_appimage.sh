@@ -16,9 +16,13 @@ SOURCES_DIR=`dirname ${SOURCES_DIR}`
 wget -nc https://github.com/linuxdeploy/linuxdeploy/releases/download/continuous/linuxdeploy-x86_64.AppImage
 wget -nc https://github.com/linuxdeploy/linuxdeploy-plugin-qt/releases/download/continuous/linuxdeploy-plugin-qt-x86_64.AppImage
 
-chmod +x linuxdeploy-*
+for FILE in linuxdeploy*; do
+    chmod +x $FILE
+    ./$FILE --appimage-extract
+done
 
 export LD_LIBRARY_PATH=${QT_INSTALL_PREFIX}/lib:${INSTALL_PREFIX}/lib:${LD_LIBRARY_PATH}
+export QT_SELECT=5
 
-./linuxdeploy-x86_64.AppImage --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
+squashfs-root/usr/bin/linuxdeploy --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
 

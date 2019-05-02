@@ -7,22 +7,21 @@ build:AppImage:
   image: conanio/gcc48
   stage: build
   script:
-    - sudo apt-get -y -qq update && sudo apt-get -y -qq install python-pip realpath wget
-    - pip install conan --upgrade
-    - pip install conan_package_tools
-    - conan user
     - conan remote add appimage-community https://api.bintray.com/conan/appimage-conan-community/public-conan --insert=0
     - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
     - conan remote add azubieta https://api.bintray.com/conan/azubieta/AppImage
-    - mkdir build && cd build
-    - conan install .. --build missing -s cppstd=11 -s compiler.libcxx=libstdc++11
-    - cmake -DUSE_CONAN=ON .. -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
-    - make install -j`nproc` DESTDIR=AppDir
+
+    - conan install . --build missing -s cppstd=11 -s compiler.libcxx=libstdc++11
     - . activate_run.sh
-    - INSTALL_PREFIX=" " ../.travis/build_appimage.sh
+
+    - cmake -DUSE_CONAN=ON . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
+    - make install -j`nproc` DESTDIR=AppDir
+    - linuxdeploy  --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
+
+    - . deactivate_run.sh
   artifacts:
     paths:
-      - build/appimage-cli-tool*.AppImage*
+      - appimage-cli-tool*.AppImage*
   cache:
     key: conan_cache
     paths:

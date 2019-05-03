@@ -9,7 +9,6 @@ build:AppImage:
   script:
     - conan remote add appimage-community https://api.bintray.com/conan/appimage-conan-community/public-conan --insert=0
     - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
-    - conan remote add azubieta https://api.bintray.com/conan/azubieta/AppImage
 
     - conan install . --build missing -s cppstd=11 -s compiler.libcxx=libstdc++11
     - . activate_run.sh

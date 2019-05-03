@@ -16,7 +16,7 @@ build:AppImage:
 
     - cmake -DUSE_CONAN=ON . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
     - make install -j`nproc` DESTDIR=AppDir
-    - linuxdeploy  --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
+    - linuxdeploy --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
 
     - . deactivate_run.sh
   artifacts:
@@ -36,7 +36,7 @@ test:AppImage:
 
   script:
     - sudo apt-get -y -qq update && sudo apt-get -y -qq install libglib2.0-0
-    - build/appimage-cli-tool*.AppImage --appimage-extract
+    - ./appimage-cli-tool*.AppImage --appimage-extract
     - squashfs-root/AppRun --help
 
 ## Debian Buster Package

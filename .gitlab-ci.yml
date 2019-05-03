@@ -10,7 +10,7 @@ build:AppImage:
     - conan remote add appimage-community https://api.bintray.com/conan/appimage-conan-community/public-conan --insert=0
     - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
 
-    - conan install . --build missing -s cppstd=11 -s compiler.libcxx=libstdc++11
+    - conan install . --build missing
     - . activate_run.sh
 
     - cmake -DUSE_CONAN=ON . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release

@@ -1,6 +1,6 @@
 [requires]
 libpng/1.6.36@bincrafters/stable
-qt/5.12.3@bincrafters/stable
+qt/5.12.3@appimage-conan-community/stable
 yaml-cpp/0.6.2@bincrafters/stable
 kf5-attica/5.57.0@appimage-conan-community/stable
 libappimage/1.0.0@appimage-conan-community/stable
@@ -19,6 +19,4 @@ virtualrunenv
 qt
 
 [options]
-qt:qttools=True
-qt:qtnetworkauth=True
 qt:widgets=True

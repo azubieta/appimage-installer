@@ -7,7 +7,6 @@ libappimage/1.0.0@appimage-conan-community/stable
 xdg-utils-cxx/0.1.1@appimage-conan-community/stable
 
 [build_requires]
-cmake_installer/3.10.0@conan/stable
 linuxdeploy/continuous@appimage-conan-community/stable
 linuxdeploy-plugin-qt/continuous@appimage-conan-community/stable
 linuxdeploy-plugin-appimage/continuous@appimage-conan-community/stable

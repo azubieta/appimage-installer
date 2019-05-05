@@ -21,6 +21,7 @@ build:AppImage:
 
     - cmake -DUSE_CONAN=ON . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release
     - make install -j`nproc` DESTDIR=AppDir
+    - AppDir/usr/bin/app --help
     - linuxdeploy --appdir=AppDir --plugin qt --output appimage --desktop-file=AppDir/usr/share/applications/org.appimage.user-tool.desktop
 
     - . deactivate_run.sh

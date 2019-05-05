@@ -4,7 +4,7 @@ stages:
 
 ## AppImage
 build:AppImage:
-  image: conanio/gcc48
+  image: conanio/gcc48:1.14.3
   stage: build
   before_script:
     # Upgrade Conan version

@@ -20,3 +20,5 @@ qt
 
 [options]
 qt:widgets=True
+glib:shared=True
+

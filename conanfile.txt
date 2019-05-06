@@ -1,4 +1,5 @@
 [requires]
+glib/2.40.0@appimage-conan-community/stable
 libpng/1.6.36@bincrafters/stable
 qt/5.12.3@appimage-conan-community/stable
 yaml-cpp/0.6.2@bincrafters/stable

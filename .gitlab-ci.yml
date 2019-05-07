@@ -13,9 +13,10 @@ build:AppImage:
     - conan user
 
   script:
-    - conan remote add appimage-community https://api.bintray.com/conan/appimage-conan-community/public-conan
-    - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan
+    - conan remote add appimage-community https://api.bintray.com/conan/appimage-conan-community/public-conan --insert=0
+    - conan remote add bincrafters https://api.bintray.com/conan/bincrafters/public-conan --insert=1
 
+    - conan install cmake_installer/3.14.3@conan/stable --build 'cmake_install*'
     - conan install . --build missing
     - . activate_run.sh
 

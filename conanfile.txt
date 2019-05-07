@@ -1,12 +1,16 @@
 [requires]
-qt/5.12.2@bincrafters/stable
+glib/2.40.0@appimage-conan-community/stable
+libpng/1.6.36@bincrafters/stable
+qt/5.12.3@appimage-conan-community/stable
 yaml-cpp/0.6.2@bincrafters/stable
 kf5-attica/5.57.0@appimage-conan-community/stable
 libappimage/1.0.0@appimage-conan-community/stable
 xdg-utils-cxx/0.1.1@appimage-conan-community/stable
 
 [build_requires]
-cmake_installer/3.10.0@conan/stable
+linuxdeploy/continuous@appimage-conan-community/stable
+linuxdeploy-plugin-qt/continuous@appimage-conan-community/stable
+linuxdeploy-plugin-appimage/continuous@appimage-conan-community/stable
 
 [generators]
 cmake
@@ -15,6 +19,6 @@ virtualrunenv
 qt
 
 [options]
-qt:qttools=True
-qt:qtnetworkauth=True
 qt:widgets=True
+glib:shared=True
+

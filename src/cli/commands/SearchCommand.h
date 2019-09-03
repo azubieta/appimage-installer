@@ -32,7 +32,7 @@ protected slots:
 protected:
     void loadCategories();
 
-    void doSearch(QList<Attica::Category> categories);
+    void doSearch();
 
     Attica::ProviderManager providerManagers;
     Attica::Provider provider;
@@ -41,4 +41,8 @@ protected:
 
     QStringList applicationsIds;
     QStringList ocsProvidersList;
+    QList<Attica::Category> categories;
+
+    int offset = 0;
+    int pageSize = 20;
 };

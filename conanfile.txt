@@ -1,10 +1,14 @@
 [requires]
 glib/2.40.0@appimage-conan-community/stable
+zlib/1.2.11@conan/stable
+bzip2/1.0.8@conan/stable
+freetype/2.9.1@appimage-conan-community/stable
+harfbuzz/2.4.0@appimage-conan-community/stable
 libpng/1.6.36@bincrafters/stable
+libappimage/1.0.2@appimage-conan-community/stable
 qt/5.12.3@appimage-conan-community/stable
 kf5-attica/5.57.0@appimage-conan-community/stable
-libappimage/1.0.0@appimage-conan-community/stable
-yaml-cpp/0.6.2@bincrafters/stable
+yaml-cpp/0.6.2@appimage-conan-community/stable
 xdg-utils-cxx/0.1.1@appimage-conan-community/stable
 
 [build_requires]
@@ -20,6 +24,8 @@ virtualrunenv
 qt
 
 [options]
-qt:widgets=True
-glib:shared=True
+qt:qtdeclarative=True
+qt:qtquickcontrols=True
+qt:qtquickcontrols2=True
+qt:qtx11extras=True
 

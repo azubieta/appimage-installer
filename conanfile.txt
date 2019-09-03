@@ -22,10 +22,3 @@ cmake
 cmake_paths
 virtualrunenv
 qt
-
-[options]
-qt:qtdeclarative=True
-qt:qtquickcontrols=True
-qt:qtquickcontrols2=True
-qt:qtx11extras=True
-

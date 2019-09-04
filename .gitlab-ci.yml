@@ -7,6 +7,8 @@ build:AppImage:
   image: conanio/gcc48:1.14.3
   stage: build
   before_script:
+    # Install build dependnecies
+    - sudo apt-get -y install librsvg2-dev
     # Upgrade Conan version
     - sudo pip install --upgrade conan
     # Automatic detection of your arch, compiler, etc.

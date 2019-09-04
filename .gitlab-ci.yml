@@ -7,6 +7,9 @@ build:AppImage:
   image: conanio/gcc48:1.14.3
   stage: build
   before_script:
+    # Install build dependencies
+    - sudo apt-get -y update
+    - sudo apt-get -y install librsvg2-dev
     # Upgrade Conan version
     - sudo pip install --upgrade conan
     # Automatic detection of your arch, compiler, etc.
@@ -42,7 +45,7 @@ test:AppImage:
     - build:AppImage
 
   script:
-    - sudo apt-get -y -qq update && sudo apt-get -y -qq install libglib2.0-0
+    - sudo apt-get -y -qq update && sudo apt-get -y -qq install libglib2.0-0 librsvg2-dev
     - ./appimage-cli-tool*.AppImage --appimage-extract
     - squashfs-root/AppRun --help
 

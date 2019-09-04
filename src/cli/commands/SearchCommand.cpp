@@ -1,4 +1,3 @@
-// libraries
 #include <QDebug>
 #include <QRegExp>
 #include <Attica/ListJob>
@@ -35,14 +34,14 @@ void SearchCommand::loadCategories() {
 
 void SearchCommand::handleListCategoriesJobFinished(Attica::BaseJob* job) {
     auto* listJob = dynamic_cast<Attica::ListJob<Attica::Category>*>(job);
-    auto categories = listJob->itemList();
+    categories = listJob->itemList();
 
-    doSearch(categories);
+    doSearch();
     listJob->deleteLater();
 }
 
-void SearchCommand::doSearch(QList<Attica::Category> categories) {
-    auto* searchContentsJob = provider.searchContents(categories, query);
+void SearchCommand::doSearch() {
+    auto* searchContentsJob = provider.searchContents(categories, query, Attica::Provider::Alphabetical, offset, pageSize);
     connect(searchContentsJob, &Attica::BaseJob::finished, this, &SearchCommand::handleSearchContentsJobFinished);
     searchContentsJob->start();
 }
@@ -54,9 +53,14 @@ void SearchCommand::handleSearchContentsJobFinished(Attica::BaseJob* job) {
     searchJob->deleteLater();
 
     QTextStream out(stdout);
-    QRegExp reg("<[^>]*>");
+    QRegExp reg(query.toLower());
     for (const auto& content: contents) {
+        // Ignore contents that don't match name
+        if (reg.indexIn(content.name().toLower()) == -1)
+            continue;
+
         out << content.id();
+
         if (!content.name().isEmpty())
             out << " " << content.name().trimmed();
 
@@ -67,7 +71,15 @@ void SearchCommand::handleSearchContentsJobFinished(Attica::BaseJob* job) {
             out << " by " << content.author().trimmed() << "\n";
     }
 
-    emit Command::executionCompleted();
+    if (contents.empty()) {
+        emit Command::executionCompleted();
+    } else {
+        searchJob->deleteLater();
+
+        // load next page
+        offset ++;
+        doSearch();
+    }
 }
 
 void SearchCommand::handleAtticaFailedToLoad(const QUrl& provider, QNetworkReply::NetworkError error) {

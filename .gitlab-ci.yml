@@ -8,6 +8,7 @@ build:AppImage:
   stage: build
   before_script:
     # Install build dependnecies
+    - sudo apt-get -y update
     - sudo apt-get -y install librsvg2-dev
     # Upgrade Conan version
     - sudo pip install --upgrade conan

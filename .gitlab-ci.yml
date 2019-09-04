@@ -30,6 +30,7 @@ build:AppImage:
 
     - . deactivate_run.sh
   artifacts:
+    expire_in: 1 year
     paths:
       - appimage-cli-tool*.AppImage*
   cache:
@@ -60,6 +61,7 @@ build:debian_buster_pkg:
   artifacts:
     paths:
       - appimage-cli-tool*.deb
+    expire_in: 1 year
 
 test:debian_buster_pkg:
   image: debian:buster
@@ -80,6 +82,7 @@ build:ubuntu_bionic_pkg:
     - make -j`nproc`
     - cpack -G DEB -G DEB -R 0.1.5-ubuntu-bionic
   artifacts:
+    expire_in: 1 year
     paths:
       - appimage-cli-tool*.deb
 
@@ -102,6 +105,7 @@ build:centos_7_pkg:
     - make -j`nproc`
     - cpack3 -G DEB -G RPM
   artifacts:
+    expire_in: 1 year
     paths:
       - appimage-cli-tool*.rpm
 
@@ -124,6 +128,7 @@ build:opensue_leap_pkg:
     - make -j`nproc`
     - cpack -G DEB -G RPM
   artifacts:
+    expire_in: 1 year
     paths:
       - appimage-cli-tool*.rpm
 
@@ -150,6 +155,7 @@ test:opensue_leap_pkg:
 #    - cp .travis/arch/PKGBUILD build
 #    - cd build && makepkg
 #  artifacts:
+#    expire_in: 1 year
 #    paths:
 #      - build/appimage-cli-tool*.pkg
 #

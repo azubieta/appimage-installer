@@ -61,7 +61,8 @@ deploy:AppImage:
 
   dependencies:
     - test:AppImage
-
+  only:
+    - tags
 
 ## Debian Buster Package
 build:debian_buster_pkg:
@@ -96,6 +97,8 @@ deploy:debian_buster_pkg:
 
   dependencies:
     - test:debian_buster_pkg
+  only:
+    - tags
 
 ## Ubuntu Bionic Package
 build:ubuntu_bionic_pkg:
@@ -130,6 +133,8 @@ deploy:ubuntu_bionic_pkg:
 
   dependencies:
     - test:ubuntu_bionic_pkg
+  only:
+    - tags
 
 ## Centos 7 Package
 build:centos_7_pkg:
@@ -164,7 +169,8 @@ deploy:centos_7_pkg:
 
   dependencies:
     - test:centos_7_pkg
-
+  only:
+    - tags
 
 ## OpenSuse Leap Package
 build:opensue_leap_pkg:
@@ -203,7 +209,8 @@ deploy:opensue_leap_pkg:
 
   dependencies:
     - test:opensue_leap_pkg
-
+  only:
+    - tags
 
 # Arch package
 #build:arch_pkg:

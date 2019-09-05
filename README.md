@@ -1,7 +1,8 @@
 # appimage-cli-tool
 
-CLI client for <http://www.appimagehub.com>. Allows to search, install, remove and update applications using the AppImage 
-package format.
+High level commandline interface for applications management based on the AppImage packaging
+format. It uses [AppImageHub](http://www.appimagehub.com) as main source and allows to search, install and
+remove applications.
 
 ## Usage
 ```bash

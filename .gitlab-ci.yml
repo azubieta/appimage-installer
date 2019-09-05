@@ -1,6 +1,7 @@
 stages:
   - build
   - test
+  - deploy
 
 ## AppImage
 build:AppImage:
@@ -50,6 +51,19 @@ test:AppImage:
     - ./appimage-cli-tool*.AppImage --appimage-extract
     - squashfs-root/AppRun --help
 
+deploy:AppImage:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="AppImage" --pkg-type=AppImage --pkg-arch=x86-64 appimage-cli-tool*.AppImage
+
+  dependencies:
+    - test:AppImage
+  only:
+    - tags
+
 ## Debian Buster Package
 build:debian_buster_pkg:
   image: azubieta90/appimage-user-tool-build:debian-buster
@@ -72,6 +86,19 @@ test:debian_buster_pkg:
   script:
     - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
     - app --help
+
+deploy:debian_buster_pkg:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+
+  dependencies:
+    - test:debian_buster_pkg
+  only:
+    - tags
 
 ## Ubuntu Bionic Package
 build:ubuntu_bionic_pkg:
@@ -96,6 +123,19 @@ test:ubuntu_bionic_pkg:
     - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
     - app --help
 
+deploy:ubuntu_bionic_pkg:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Ubuntu Bionic" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+
+  dependencies:
+    - test:ubuntu_bionic_pkg
+  only:
+    - tags
+
 ## Centos 7 Package
 build:centos_7_pkg:
   image: azubieta90/appimage-user-tool-build:centos-7
@@ -118,6 +158,19 @@ test:centos_7_pkg:
   script:
     - yum -y update && yum install -y ./appimage-cli-tool*.rpm
     - app --help
+
+deploy:centos_7_pkg:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
+
+  dependencies:
+    - test:centos_7_pkg
+  only:
+    - tags
 
 ## OpenSuse Leap Package
 build:opensue_leap_pkg:
@@ -146,6 +199,19 @@ test:opensue_leap_pkg:
     - zypper --non-interactive --no-gpg-checks install ./appimage-cli-tool*.rpm
     - app --help
 
+deploy:opensue_leap_pkg:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Open Suse Leap" --pkg-type=OpenSuse --pkg-arch=x86-64 appimage-cli-tool*.rpm
+
+  dependencies:
+    - test:opensue_leap_pkg
+  only:
+    - tags
+
 # Arch package
 #build:arch_pkg:
 #  image: azubieta90/appimage-user-tool-build:arch
@@ -168,4 +234,3 @@ test:opensue_leap_pkg:
 #    - app --help
 #  dependencies:
 #    - build:arch_pkg
-

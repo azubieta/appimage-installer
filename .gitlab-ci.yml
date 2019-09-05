@@ -57,7 +57,7 @@ deploy:AppImage:
   script:
     - pip3 install requests
     - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password=$PASSWORD --product=1298369 --version=0.1.5 --description="AppImage" --pkg-type=AppImage --pkg-arch=x86-64 appimage-cli-tool*.AppImage
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="AppImage" --pkg-type=AppImage --pkg-arch=x86-64 appimage-cli-tool*.AppImage
 
   dependencies:
     - test:AppImage
@@ -92,7 +92,7 @@ deploy:debian_buster_pkg:
   script:
     - pip3 install requests
     - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password=$PASSWORD --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
 
   dependencies:
     - test:debian_buster_pkg
@@ -126,7 +126,7 @@ deploy:ubuntu_bionic_pkg:
   script:
     - pip3 install requests
     - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password=$PASSWORD --product=1298369 --version=0.1.5 --description="Ubuntu Bionic" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Ubuntu Bionic" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
 
   dependencies:
     - test:ubuntu_bionic_pkg
@@ -160,7 +160,7 @@ deploy:centos_7_pkg:
   script:
     - pip3 install requests
     - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password=$PASSWORD --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
 
   dependencies:
     - test:centos_7_pkg
@@ -199,7 +199,7 @@ deploy:opensue_leap_pkg:
   script:
     - pip3 install requests
     - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password=$PASSWORD --product=1298369 --version=0.1.5 --description="Open Suse Leap" --pkg-type=OpenSuse --pkg-arch=x86-64 appimage-cli-tool*.rpm
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Open Suse Leap" --pkg-type=OpenSuse --pkg-arch=x86-64 appimage-cli-tool*.rpm
 
   dependencies:
     - test:opensue_leap_pkg

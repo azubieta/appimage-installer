@@ -50,167 +50,167 @@ test:AppImage:
     - sudo apt-get -y -qq update && sudo apt-get -y -qq install libglib2.0-0 librsvg2-dev
     - ./appimage-cli-tool*.AppImage --appimage-extract
     - squashfs-root/AppRun --help
-
-deploy:AppImage:
-  image: python:3.7
-  stage: deploy
-  script:
-    - pip3 install requests
-    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="AppImage" --pkg-type=AppImage --pkg-arch=x86-64 appimage-cli-tool*.AppImage
-
-  dependencies:
-    - test:AppImage
-  only:
-    - tags
-
-## Debian Buster Package
-build:debian_buster_pkg:
-  image: azubieta90/appimage-user-tool-build:debian-buster
-  stage: build
-  script:
-    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
-    - make -j`nproc`
-    - cpack -G DEB -G DEB -R 0.1.5-debian-buster
-  artifacts:
-    paths:
-      - appimage-cli-tool*.deb
-    expire_in: 1 year
-
-test:debian_buster_pkg:
-  image: debian:buster
-  stage: test
-  dependencies:
-    - build:debian_buster_pkg
-
-  script:
-    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
-    - app --help
-
-deploy:debian_buster_pkg:
-  image: python:3.7
-  stage: deploy
-  script:
-    - pip3 install requests
-    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
-
-  dependencies:
-    - test:debian_buster_pkg
-  only:
-    - tags
-
-## Ubuntu Bionic Package
-build:ubuntu_bionic_pkg:
-  image: azubieta90/appimage-user-tool-build:ubuntu-bionic
-  stage: build
-  script:
-    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
-    - make -j`nproc`
-    - cpack -G DEB -G DEB -R 0.1.5-ubuntu-bionic
-  artifacts:
-    expire_in: 1 year
-    paths:
-      - appimage-cli-tool*.deb
-
-test:ubuntu_bionic_pkg:
-  image: ubuntu:bionic
-  stage: test
-  dependencies:
-    - build:ubuntu_bionic_pkg
-
-  script:
-    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
-    - app --help
-
-deploy:ubuntu_bionic_pkg:
-  image: python:3.7
-  stage: deploy
-  script:
-    - pip3 install requests
-    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Ubuntu Bionic" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
-
-  dependencies:
-    - test:ubuntu_bionic_pkg
-  only:
-    - tags
-
-## Centos 7 Package
-build:centos_7_pkg:
-  image: azubieta90/appimage-user-tool-build:centos-7
-  stage: build
-  script:
-    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
-    - make -j`nproc`
-    - cpack3 -G DEB -G RPM
-  artifacts:
-    expire_in: 1 year
-    paths:
-      - appimage-cli-tool*.rpm
-
-test:centos_7_pkg:
-  image: centos:7
-  stage: test
-  dependencies:
-    - build:centos_7_pkg
-
-  script:
-    - yum -y update && yum install -y ./appimage-cli-tool*.rpm
-    - app --help
-
-deploy:centos_7_pkg:
-  image: python:3.7
-  stage: deploy
-  script:
-    - pip3 install requests
-    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
-
-  dependencies:
-    - test:centos_7_pkg
-  only:
-    - tags
-
-## OpenSuse Leap Package
-build:opensue_leap_pkg:
-  image: azubieta90/appimage-user-tool-build:opensuse-leap
-  stage: build
-  script:
-    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-opensue-leap'
-    - make -j`nproc`
-    - cpack -G DEB -G RPM
-  artifacts:
-    expire_in: 1 year
-    paths:
-      - appimage-cli-tool*.rpm
-
-test:opensue_leap_pkg:
-  image: opensuse/leap:15
-  stage: test
-  dependencies:
-    - build:opensue_leap_pkg
-
-  script:
-    - zypper addrepo https://download.opensuse.org/repositories/Kernel:/tools/openSUSE_Leap_15.0/Kernel:tools.repo
-    - zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_Leap_15.0/KDE:Qt5.repo
-    - zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_15.0/KDE:Frameworks5.repo
-    - zypper --non-interactive --no-gpg-checks refresh
-    - zypper --non-interactive --no-gpg-checks install ./appimage-cli-tool*.rpm
-    - app --help
-
-deploy:opensue_leap_pkg:
-  image: python:3.7
-  stage: deploy
-  script:
-    - pip3 install requests
-    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Open Suse Leap" --pkg-type=OpenSuse --pkg-arch=x86-64 appimage-cli-tool*.rpm
-
-  dependencies:
-    - test:opensue_leap_pkg
-  only:
-    - tags
+#
+#deploy:AppImage:
+#  image: python:3.7
+#  stage: deploy
+#  script:
+#    - pip3 install requests
+#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="AppImage" --pkg-type=AppImage --pkg-arch=x86-64 appimage-cli-tool*.AppImage
+#
+#  dependencies:
+#    - test:AppImage
+#  only:
+#    - tags
+#
+### Debian Buster Package
+#build:debian_buster_pkg:
+#  image: azubieta90/appimage-user-tool-build:debian-buster
+#  stage: build
+#  script:
+#    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
+#    - make -j`nproc`
+#    - cpack -G DEB -G DEB -R 0.1.5-debian-buster
+#  artifacts:
+#    paths:
+#      - appimage-cli-tool*.deb
+#    expire_in: 1 year
+#
+#test:debian_buster_pkg:
+#  image: debian:buster
+#  stage: test
+#  dependencies:
+#    - build:debian_buster_pkg
+#
+#  script:
+#    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
+#    - app --help
+#
+#deploy:debian_buster_pkg:
+#  image: python:3.7
+#  stage: deploy
+#  script:
+#    - pip3 install requests
+#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+#
+#  dependencies:
+#    - test:debian_buster_pkg
+#  only:
+#    - tags
+#
+### Ubuntu Bionic Package
+#build:ubuntu_bionic_pkg:
+#  image: azubieta90/appimage-user-tool-build:ubuntu-bionic
+#  stage: build
+#  script:
+#    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
+#    - make -j`nproc`
+#    - cpack -G DEB -G DEB -R 0.1.5-ubuntu-bionic
+#  artifacts:
+#    expire_in: 1 year
+#    paths:
+#      - appimage-cli-tool*.deb
+#
+#test:ubuntu_bionic_pkg:
+#  image: ubuntu:bionic
+#  stage: test
+#  dependencies:
+#    - build:ubuntu_bionic_pkg
+#
+#  script:
+#    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
+#    - app --help
+#
+#deploy:ubuntu_bionic_pkg:
+#  image: python:3.7
+#  stage: deploy
+#  script:
+#    - pip3 install requests
+#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Ubuntu Bionic" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+#
+#  dependencies:
+#    - test:ubuntu_bionic_pkg
+#  only:
+#    - tags
+#
+### Centos 7 Package
+#build:centos_7_pkg:
+#  image: azubieta90/appimage-user-tool-build:centos-7
+#  stage: build
+#  script:
+#    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
+#    - make -j`nproc`
+#    - cpack3 -G DEB -G RPM
+#  artifacts:
+#    expire_in: 1 year
+#    paths:
+#      - appimage-cli-tool*.rpm
+#
+#test:centos_7_pkg:
+#  image: centos:7
+#  stage: test
+#  dependencies:
+#    - build:centos_7_pkg
+#
+#  script:
+#    - yum -y update && yum install -y ./appimage-cli-tool*.rpm
+#    - app --help
+#
+#deploy:centos_7_pkg:
+#  image: python:3.7
+#  stage: deploy
+#  script:
+#    - pip3 install requests
+#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
+#
+#  dependencies:
+#    - test:centos_7_pkg
+#  only:
+#    - tags
+#
+### OpenSuse Leap Package
+#build:opensue_leap_pkg:
+#  image: azubieta90/appimage-user-tool-build:opensuse-leap
+#  stage: build
+#  script:
+#    - cmake . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='libboost_filesystem1_66_0, libarchive13, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-opensue-leap'
+#    - make -j`nproc`
+#    - cpack -G DEB -G RPM
+#  artifacts:
+#    expire_in: 1 year
+#    paths:
+#      - appimage-cli-tool*.rpm
+#
+#test:opensue_leap_pkg:
+#  image: opensuse/leap:15
+#  stage: test
+#  dependencies:
+#    - build:opensue_leap_pkg
+#
+#  script:
+#    - zypper addrepo https://download.opensuse.org/repositories/Kernel:/tools/openSUSE_Leap_15.0/Kernel:tools.repo
+#    - zypper addrepo https://download.opensuse.org/repositories/KDE:/Qt5/openSUSE_Leap_15.0/KDE:Qt5.repo
+#    - zypper addrepo https://download.opensuse.org/repositories/KDE:/Frameworks5/openSUSE_Leap_15.0/KDE:Frameworks5.repo
+#    - zypper --non-interactive --no-gpg-checks refresh
+#    - zypper --non-interactive --no-gpg-checks install ./appimage-cli-tool*.rpm
+#    - app --help
+#
+#deploy:opensue_leap_pkg:
+#  image: python:3.7
+#  stage: deploy
+#  script:
+#    - pip3 install requests
+#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Open Suse Leap" --pkg-type=OpenSuse --pkg-arch=x86-64 appimage-cli-tool*.rpm
+#
+#  dependencies:
+#    - test:opensue_leap_pkg
+#  only:
+#    - tags
 
 # Arch package
 #build:arch_pkg:

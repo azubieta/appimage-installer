@@ -1,15 +1,15 @@
-add_executable(
-    app
+set(
+    APP_SRCS
     main.cpp
     Command.h
     commands/SearchCommand.cpp
     commands/RemoveCommand.cpp
     commands/ListCommand.cpp
     commands/InstallCommand.cpp
-
-    $<TARGET_OBJECTS:settings-common>
-    $<TARGET_OBJECTS:core>
+    commands/UpdateCommand.cpp
 )
+
+add_executable(app ${APP_SRCS} $<TARGET_OBJECTS:settings-common> $<TARGET_OBJECTS:core>)
 
 configure_module(app)
 
@@ -24,6 +24,7 @@ target_link_libraries(
     PRIVATE libappimage
     PRIVATE XdgUtils::DesktopEntry
     PRIVATE yaml-cpp
+    PRIVATE AppImageUpdaterBridge
 )
 
 add_dependencies(app core settings-common)

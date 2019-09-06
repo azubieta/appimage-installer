@@ -7,6 +7,7 @@
 #include "commands/InstallCommand.h"
 #include "commands/ListCommand.h"
 #include "commands/RemoveCommand.h"
+#include "commands/UpdateCommand.h"
 #include "settings/Settings.h"
 
 Command* createCommand(QStringList& args, Settings& settings);
@@ -144,8 +145,14 @@ Command* createCommand(QStringList& args, Settings& settings) {
             return new RemoveCommand(args.first());
     }
 
-    if (!args.isEmpty() && args.first() == "update")
-        qCritical() << "Updates aren't supported yet. Use AppImageUpate in the meanwhile.";
+    if (!args.isEmpty() && args.first() == "update") {
+        args.pop_front();
+        if (args.empty())
+            qInfo() << "Missing application id. Example:\n"
+                       "\tapp remove firefox\n\n";
+        else
+            return new UpdateCommand(args.first());
+    }
 
     return nullptr;
 }

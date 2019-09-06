@@ -19,7 +19,6 @@ private:
     QString target;
     AppImageUpdaterBridge::AppImageDeltaRevisioner* helper;
 
-    QStringList listAppImages();
 };
 
 

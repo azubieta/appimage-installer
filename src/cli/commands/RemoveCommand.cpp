@@ -5,6 +5,7 @@
 #include <appimage/appimage.h>
 
 // local
+#include "AppsLibrary.h"
 #include "RemoveCommand.h"
 
 RemoveCommand::RemoveCommand(QString& target, QObject* parent) : Command(parent), target(target) {}
@@ -19,21 +20,15 @@ void RemoveCommand::execute() {
                       appimage_unregister_in_system(target.toLocal8Bit(), false) == 0;
         }
     } else {
-        auto appImages = listAppImages();
+        auto appImagePaths = AppsLibrary::find(target);
+        if (!appImagePaths.empty()) {
+            auto targetPath = appImagePaths.first();
+            appimage_unregister_in_system(targetPath.toLatin1().data(), false);
+            QFile::remove(targetPath);
 
-        for (const auto& appImage: appImages) {
-            char** fileList = appimage_list_files(appImage.toStdString().c_str());
-            for (char** itr = fileList; *itr != nullptr; itr++) {
-                QString path = *itr;
-                if (path.remove(".desktop") == target) {
-                    QFile::remove(appImage);
-                    appimage_unregister_in_system(appImage.toStdString().c_str(), false);
-                    removed = true;
-                }
-            }
-
-            appimage_string_list_free(fileList);
+            removed = true;
         }
+
     }
 
     if (removed) {
@@ -42,20 +37,6 @@ void RemoveCommand::execute() {
 
         emit Command::executionCompleted();
     } else
-        emit Command::executionFailed("Application not found: " + target);
+            emit Command::executionFailed("Application not found: " + target);
 }
 
-QList<QString> RemoveCommand::listAppImages() {
-    QList<QString> list;
-    QDir dir(QDir::homePath() + "/Applications");
-
-    auto candidates = dir.entryList({}, QDir::Files);
-    for (const auto& candidate: candidates) {
-        auto fullPath = dir.filePath(candidate).toLocal8Bit();
-        int type = appimage_get_type(fullPath, false);
-        if (type != -1)
-            list << fullPath;
-    }
-
-    return list;
-}

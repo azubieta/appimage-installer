@@ -43,3 +43,8 @@ QStringList AppsLibrary::find(const QString& targetAppId) {
 
     return appImagePaths;
 }
+
+void AppsLibrary::remove(const QString& appImagePath) {
+    appimage_unregister_in_system(appImagePath.toLatin1().data(), false);
+    QFile::remove(appImagePath);
+}

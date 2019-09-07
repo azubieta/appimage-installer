@@ -28,7 +28,6 @@ void RemoveCommand::execute() {
 
             removed = true;
         }
-
     }
 
     if (removed) {
@@ -36,7 +35,8 @@ void RemoveCommand::execute() {
         out << "Application removed: " + target << "\n";
 
         emit Command::executionCompleted();
-    } else
-            emit Command::executionFailed("Application not found: " + target);
+    } else {
+        emit Command::executionFailed("Application not found: " + target);
+    }
 }
 

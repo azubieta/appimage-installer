@@ -29,6 +29,12 @@ public:
      * @return AppImage file path
      */
     static QStringList find(const QString &appId);
+
+    /**
+     * Remove an application from the system
+     * @param appImagePath
+     */
+    static void remove(const QString& appImagePath);
 };
 
 

@@ -40,6 +40,7 @@ void Download::start() {
 QNetworkRequest Download::createRequest() const {
     QNetworkRequest request = QNetworkRequest(source_url);
     request.setAttribute(QNetworkRequest::FollowRedirectsAttribute, true);
+    request.setAttribute(QNetworkRequest::HttpPipeliningAllowedAttribute, true);
     return request;
 }
 

@@ -4,7 +4,7 @@ RUN apt-get update;
 
 # Install libappimage build dependencies
 RUN apt-get install -y git g++ automake cmake build-essential libtool wget xxd desktop-file-utils \
-    librsvg2-bin libcairo2-dev libglib2.0-dev libarchive-dev libfuse-dev liblzma-dev libboost-filesystem-dev
+    librsvg2-bin libcairo2-dev libglib2.0-dev libarchive-dev libfuse-dev liblzma-dev libboost-filesystem-dev librsvg2-dev
 
 # Build and install libappimage
 RUN git clone https://github.com/AppImage/libappimage.git --depth=1 /tmp/libappimage
@@ -51,6 +51,15 @@ RUN cd /tmp/yaml-cpp && \
     cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
 
+
+# Install AppImageUpdaterBridge
+RUN git clone https://github.com/antony-jr/AppImageUpdaterBridge.git /tmp/AppImageUpdaterBridge
+RUN cd /tmp/AppImageUpdaterBridge && \
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
+RUN rm -rf /tmp/*
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

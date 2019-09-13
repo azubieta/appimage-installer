@@ -32,7 +32,7 @@ find_package(Qt5 COMPONENTS Core Widgets Network Gui REQUIRED)
 find_package(XdgUtils COMPONENTS DesktopEntry REQUIRED)
 find_package(yaml-cpp REQUIRED)
 find_package(KF5Attica REQUIRED)
-find_package(AppImageUpdaterBridge QUIET)
+find_package(AppImageUpdaterBridge REQUIRED)
 
 # Source
 add_subdirectory(src)

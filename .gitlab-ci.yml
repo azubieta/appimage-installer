@@ -63,43 +63,42 @@ test:AppImage:
 #    - test:AppImage
 #  only:
 #    - tags
-#
-### Debian Buster Package
-#build:debian_buster_pkg:
-#  image: azubieta90/appimage-user-tool-build:debian-buster
-#  stage: build
-#  script:
-#    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
-#    - make -j`nproc`
-#    - cpack -G DEB -G DEB -R 0.1.5-debian-buster
-#  artifacts:
-#    paths:
-#      - appimage-cli-tool*.deb
-#    expire_in: 1 year
-#
-#test:debian_buster_pkg:
-#  image: debian:buster
-#  stage: test
-#  dependencies:
-#    - build:debian_buster_pkg
-#
-#  script:
-#    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
-#    - app --help
-#
-#deploy:debian_buster_pkg:
-#  image: python:3.7
-#  stage: deploy
-#  script:
-#    - pip3 install requests
-#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
-#
-#  dependencies:
-#    - test:debian_buster_pkg
-#  only:
-#    - tags
-#
+
+build:debian_buster_pkg:
+  image: azubieta90/appimage-user-tool-build:debian-buster
+  stage: build
+  script:
+    - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
+    - make -j`nproc`
+    - cpack -G DEB -G DEB -R 0.1.5-debian-buster
+  artifacts:
+    paths:
+      - appimage-cli-tool*.deb
+    expire_in: 1 year
+
+test:debian_buster_pkg:
+  image: debian:buster
+  stage: test
+  dependencies:
+    - build:debian_buster_pkg
+
+  script:
+    - apt -y -qq update && apt -y -qq install ./appimage-cli-tool*
+    - app --help
+
+deploy:debian_buster_pkg:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Debian Buster" --pkg-type=Debian --pkg-arch=x86-64 appimage-cli-tool*.deb
+
+  dependencies:
+    - test:debian_buster_pkg
+  only:
+    - tags
+
 ### Ubuntu Bionic Package
 #build:ubuntu_bionic_pkg:
 #  image: azubieta90/appimage-user-tool-build:ubuntu-bionic

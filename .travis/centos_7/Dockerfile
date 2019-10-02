@@ -18,7 +18,7 @@ RUN cd /tmp/libappimage && \
         -DUSE_SYSTEM_BOOST=ON\
         -DCMAKE_INSTALL_PREFIX=/usr \
         -DCMAKE_BUILD_TYPE=Release && \
-    make -j`nproc` install
+    make install
 
 RUN yum -y install qt5-qtxmlpatterns-devel qt5-qtnetwork-devel qt5-qtbase-devel
 
@@ -53,6 +53,15 @@ RUN cd /tmp/yaml-cpp && \
     git submodule update --init --recursive && \
     cmake3 . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
+
+# Install AppImageUpdaterBridge
+RUN git clone https://github.com/antony-jr/AppImageUpdaterBridge.git /tmp/AppImageUpdaterBridge
+RUN cd /tmp/AppImageUpdaterBridge && \
+    cmake3 . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
+RUN rm -rf /tmp/*
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

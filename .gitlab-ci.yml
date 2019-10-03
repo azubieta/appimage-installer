@@ -153,18 +153,17 @@ build:arch_pkg:
     - mkdir build
     - cp .travis/arch/PKGBUILD build
     - cd build && makepkg
-    - find .
   artifacts:
     expire_in: 1 year
     paths:
-      - appimage-cli-tool*.pkg
+      - build/appimage-cli-tool*.pkg.*
 
 
 test:arch_pkg:
   image: archlinux/base
   stage: test
   script:
-    - pacman -Sp --noconfirm appimage-cli-tool*.pkg
+    - pacman -Sp --noconfirm build/appimage-cli-tool*.pkg.*
     - app --help
   dependencies:
     - build:arch_pkg

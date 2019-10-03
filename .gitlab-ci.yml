@@ -163,7 +163,8 @@ test:arch_pkg:
   image: archlinux/base
   stage: test
   script:
-    - pacman -Sp --noconfirm build/appimage-cli-tool*.pkg.*
+    - pacman -Sy
+    - pacman -U --noconfirm build/appimage-cli-tool*.pkg.*
     - app --help
   dependencies:
     - build:arch_pkg

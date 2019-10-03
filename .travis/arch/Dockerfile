@@ -19,6 +19,15 @@ RUN cd /tmp/yaml-cpp && \
     make -j`nproc` install && \
     cd / && rm -rf /tmp/yaml-cpp
 
+# Install AppImageUpdaterBridge
+RUN git clone https://github.com/antony-jr/AppImageUpdaterBridge.git /tmp/AppImageUpdaterBridge
+RUN cd /tmp/AppImageUpdaterBridge && \
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
+RUN rm -rf /tmp/*
+RUN rm -rf /var/lib/apt/lists/*
+
 
 RUN useradd build
 USER build

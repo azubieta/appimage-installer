@@ -135,42 +135,42 @@ deploy:ubuntu_bionic_pkg:
   only:
     - tags
 
-### Centos 7 Package
-#build:centos_7_pkg:
-#  image: azubieta90/appimage-user-tool-build:centos-7
-#  stage: build
-#  script:
-#    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
-#    - make -j`nproc`
-#    - cpack3 -G DEB -G RPM
-#  artifacts:
-#    expire_in: 1 year
-#    paths:
-#      - appimage-cli-tool*.rpm
-#
-#test:centos_7_pkg:
-#  image: centos:7
-#  stage: test
-#  dependencies:
-#    - build:centos_7_pkg
-#
-#  script:
-#    - yum -y update && yum install -y ./appimage-cli-tool*.rpm
-#    - app --help
-#
-#deploy:centos_7_pkg:
-#  image: python:3.7
-#  stage: deploy
-#  script:
-#    - pip3 install requests
-#    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
-#    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
-#
-#  dependencies:
-#    - test:centos_7_pkg
-#  only:
-#    - tags
-#
+## Centos 7 Package
+build:centos_7_pkg:
+  image: azubieta90/appimage-user-tool-build:centos-7
+  stage: build
+  script:
+    - cmake3 . -DCPACK_RPM_PACKAGE_PROVIDES='libappimage.so.1.0()(64bit), libKF5Attica.so.5()(64bit)' -DCPACK_RPM_PACKAGE_REQUIRES='boost-filesystem, libarchive, cairo, librsvg2' -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release -DAPPIMAGE_CLI_TOOL_V_SUFFIX='-centos-7'
+    - make -j`nproc`
+    - cpack3 -G DEB -G RPM
+  artifacts:
+    expire_in: 1 year
+    paths:
+      - appimage-cli-tool*.rpm
+
+test:centos_7_pkg:
+  image: centos:7
+  stage: test
+  dependencies:
+    - build:centos_7_pkg
+
+  script:
+    - yum -y update && yum install -y ./appimage-cli-tool*.rpm
+    - app --help
+
+deploy:centos_7_pkg:
+  image: python:3.7
+  stage: deploy
+  script:
+    - pip3 install requests
+    - wget https://www.opencode.net/azubieta/ocs-upload-tool/raw/master/ocs-upload.py
+    - python3 ocs-upload.py --username=azubieta --password="${PASSWORD}" --product=1298369 --version=0.1.5 --description="Centos 7" --pkg-type=RedHat --pkg-arch=x86-64 appimage-cli-tool*.rpm
+
+  dependencies:
+    - test:centos_7_pkg
+  only:
+    - tags
+
 ### OpenSuse Leap Package
 #build:opensue_leap_pkg:
 #  image: azubieta90/appimage-user-tool-build:opensuse-leap

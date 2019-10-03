@@ -34,12 +34,20 @@ RUN cd /tmp/xdg_utils_cxx && \
 RUN rm -rf /tmp/xdg_utils_cxx
 
 # Install yaml-cpp
-RUN git clone https://github.com/jbeder/yaml-cpp.git --depth=1 /tmp/yaml-cpp
+RUN git clone https://github.com/jbeder/yaml-cpp.git --depth=1 /tmp/yaml-cpp -b yaml-cpp-0.6.3
 RUN cd /tmp/yaml-cpp && \
     git submodule update --init --recursive && \
     cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
     make -j`nproc` install
-RUN rm -rf cd /tmp/yaml-cpp
+
+# Install AppImageUpdaterBridge
+RUN git clone https://github.com/antony-jr/AppImageUpdaterBridge.git /tmp/AppImageUpdaterBridge
+RUN cd /tmp/AppImageUpdaterBridge && \
+    cmake . -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release && \
+    make -j`nproc` install
+
+RUN rm -rf /tmp/*
+RUN rm -rf /var/lib/apt/lists/*
 
 WORKDIR /build
 VOLUME  ["/sources", "/build"]

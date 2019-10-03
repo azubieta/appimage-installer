@@ -2,6 +2,8 @@ add_library(
     core OBJECT
     Download.cpp
     FileDownload.cpp
+    AppsLibrary.cpp
+    Console.cpp
 )
 
 configure_module(core)

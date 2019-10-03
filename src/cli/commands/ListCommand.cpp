@@ -6,21 +6,16 @@
 
 // local
 #include "ListCommand.h"
+#include "AppsLibrary.h"
 
 void ListCommand::execute() {
-    auto appImages = listAppImages();
+    auto appImagePaths = AppsLibrary::list();
 
     QList<QPair<QString, QString>> applications;
-    for (const auto& appImage: appImages) {
-        char** fileList = appimage_list_files(appImage.toStdString().c_str());
-        for (char** itr = fileList; *itr != nullptr; itr++) {
-            QString path = *itr;
-            if (path.endsWith(".desktop") && !path.contains('/')) {
-                applications << QPair<QString, QString>(path.remove(".desktop"), appImage);
-            }
-        }
+    for (const auto& appImagePath: appImagePaths) {
+        QString appImageId = AppsLibrary::getApplicationId(appImagePath);
 
-        appimage_string_list_free(fileList);
+        applications << QPair<QString, QString>(appImageId, appImagePath);
     }
 
 
@@ -44,19 +39,3 @@ void ListCommand::execute() {
     }
     emit Command::executionCompleted();
 }
-
-QList<QString> ListCommand::listAppImages() {
-    QList<QString> list;
-    QDir dir(QDir::homePath() + "/Applications");
-
-    auto candidates = dir.entryList({}, QDir::Files);
-    for (const auto& candidate: candidates) {
-        auto fullPath = dir.filePath(candidate).toLocal8Bit();
-        int type = appimage_get_type(fullPath, false);
-        if (type != -1)
-            list << fullPath;
-    }
-
-    return list;
-}
-

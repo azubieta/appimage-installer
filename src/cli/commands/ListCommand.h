@@ -11,7 +11,5 @@ public:
 public slots:
     void execute() override;
 
-private:
-    QList<QString> listAppImages();
 };
 

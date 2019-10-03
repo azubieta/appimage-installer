@@ -17,7 +17,7 @@ Q_OBJECT
 public:
     FileDownload(const QUrl& url, const QString& target_path, QObject* parent = nullptr);
 
-    virtual ~FileDownload();
+    ~FileDownload() override;
 
 public slots:
 

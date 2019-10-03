@@ -4,12 +4,13 @@ bzip2/1.0.8@conan/stable
 harfbuzz/2.4.0@appimage-conan-community/stable
 freetype/2.10.0@bincrafters/stable
 fontconfig/2.13.1@appimage-conan-community/stable
-libpng/1.6.37@bincrafters/stable
+libpng/1.6.36@bincrafters/stable
 libappimage/1.0.2@appimage-conan-community/stable
 qt/5.12.3@appimage-conan-community/stable
 kf5-attica/5.57.0@appimage-conan-community/stable
 yaml-cpp/0.6.2@appimage-conan-community/stable
 xdg-utils-cxx/0.1.1@appimage-conan-community/stable
+AppImageUpdaterBridge/1.1.3@appimage-conan-community/stable
 
 [build_requires]
 cmake_installer/3.14.3@conan/stable

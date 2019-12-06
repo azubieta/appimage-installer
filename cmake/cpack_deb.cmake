@@ -30,7 +30,6 @@ endif()
 
 # Custom package names
 set(CPACK_DEBIAN_APPIMAGE_CLI_TOOL_PACKAGE_NAME appimage-cli-tool)
-set(CPACK_DEBIAN_APPIMAGE_CLI_TOOL_SETTINGS_PACKAGE_NAME appimage-cli-tool-settings)
 
 # Dependencies
 set(CPACK_DEBIAN_PACKAGE_SHLIBDEPS ON)

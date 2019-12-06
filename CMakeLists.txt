@@ -13,7 +13,6 @@ include(GNUInstallDirs)
 
 ## Config
 option(USE_CONAN "Use conan as source of dependencies" OFF)
-option(BUILD_SETTINGS_DIALOG "Build the settings dialog componetns" ON)
 option(INSTALL_LIBAPPIMAGE "Install libAppImage as part of this project" OFF)
 option(INSTALL_ATTICA "Install KF5 Attica as part of this project" OFF)
 

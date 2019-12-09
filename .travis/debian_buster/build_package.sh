@@ -15,4 +15,4 @@ fi
 
 mkdir docker-build-release
 sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build ${DOCKER_IMAGE} \
-    /bin/bash -c "cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release /source && make -j`nproc` && cpack -G DEB -G DEB -R 0.1.6-debian-buster"
+    /bin/bash -c "cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release /source && make -j`nproc` && cpack -G DEB -G DEB -R 1.0.0-debian-buster"

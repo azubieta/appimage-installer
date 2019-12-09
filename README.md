@@ -1,8 +1,8 @@
-# appimage-cli-tool
+# appimage-installer
 
 High level commandline interface for applications management based on the AppImage packaging
-format. It uses [AppImageHub](http://www.appimagehub.com) as main source and allows to search, install and
-remove applications.
+format. It uses [AppImageHub](http://www.appimagehub.com) as main source and allows to search, install, remove and
+update applications.
 
 ## Usage
 ```bash

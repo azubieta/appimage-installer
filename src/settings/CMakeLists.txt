@@ -4,25 +4,25 @@ add_library(settings-common OBJECT Settings.cpp Settings.h)
 configure_module(settings-common)
 target_include_directories(settings-common PUBLIC ${CMAKE_CURRENT_SOURCE_DIR})
 
-if(BUILD_SETTINGS_DIALOG)
-    add_executable(
-        appimage-cli-tool-settings
-        main.cpp
-        SettingsDialog.h
-        SettingsDialog.cpp
-        SettingsDialog.ui
 
-        $<TARGET_OBJECTS:settings-common>
-    )
+add_executable(
+    appimage-installer-settings
+    main.cpp
+    SettingsDialog.h
+    SettingsDialog.cpp
+    SettingsDialog.ui
 
-    configure_module(appimage-cli-tool-settings)
-    target_link_libraries(appimage-cli-tool-settings PRIVATE Qt5::Core Qt5::Widgets yaml-cpp)
+    $<TARGET_OBJECTS:settings-common>
+)
 
-    add_dependencies(appimage-cli-tool-settings settings-common)
+configure_module(appimage-installer-settings)
+target_link_libraries(appimage-installer-settings PRIVATE Qt5::Core Qt5::Widgets yaml-cpp)
 
-    # Install
-    install(
-        TARGETS appimage-cli-tool-settings
-        RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT APPIMAGE_CLI_TOOL_SETTINGS
-    )
-endif()
+add_dependencies(appimage-installer-settings settings-common)
+
+# Install
+install(
+    TARGETS appimage-installer-settings
+    RUNTIME DESTINATION ${CMAKE_INSTALL_BINDIR} COMPONENT APPIMAGE_INSTALLER
+)
+

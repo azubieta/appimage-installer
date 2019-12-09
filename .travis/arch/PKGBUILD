@@ -21,7 +21,7 @@ backup=()
 options=()
 install=
 changelog=
-source=("git@www.opencode.net:azubieta/$projectname#tag=continuous")
+source=("git@www.opencode.net:azubieta/$projectname")
 sha256sums=('SKIP')
 noextract=()
 validpgpkeys=()
@@ -29,13 +29,14 @@ validpgpkeys=()
 pkgver() {
   cd "$srcdir/$projectname"
 
-  printf "$pkgver+git`date +%Y%m%d -u -d "$(git show -s --format=%ci $(git rev-parse HEAD))"`.%s" "$(git rev-parse --short HEAD)"
+  printf "$pkgver+git`date +%Y%m%d -u -d "$(git show -s --format=%ci $CI_COMMIT_SHA)"`.%s" "$CI_COMMIT_SHA"
 }
 
 prepare() {
   cd "$srcdir/$projectname"
 
   git submodule update --init --recursive
+  git checkout ${CI_COMMIT_SHA}
 }
 
 build() {

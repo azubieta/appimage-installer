@@ -1,13 +1,13 @@
 # Maintainer: Alexis Lopez Zubieta <contact@azubieta.net>
-projectname=appimage-cli-tool
+projectname=appimage-installer
 
-pkgname=appimage-cli-tool
-pkgver=0.1.6
+pkgname=appimage-installer
+pkgver=1.0.0
 pkgrel=1
 epoch=
-pkgdesc="AppImageHub CLI client"
+pkgdesc="AppImageHub Installer"
 arch=('x86_64')
-url="https://github.com/azubieta/$projectname"
+url="https://www.opencode.net/azubieta/$projectname"
 license=('MIT')
 groups=('appimage')
 depends=('qt5-base' 'qt5-xmlpatterns' 'attica' 'libappimage' 'librsvg')
@@ -21,7 +21,7 @@ backup=()
 options=()
 install=
 changelog=
-source=("git://github.com/azubieta/$projectname#tag=continuous")
+source=("git@www.opencode.net:azubieta/$projectname#tag=continuous")
 sha256sums=('SKIP')
 noextract=()
 validpgpkeys=()

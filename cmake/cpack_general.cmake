@@ -1,22 +1,21 @@
 # general CPack options
 
-set(PROJECT_VERSION ${APPIMAGE_CLI_TOOL_VERSION})
+set(PROJECT_VERSION ${APPIMAGE_INSTALLER_VERSION})
 
-# make sure to only package APPIMAGE_CLI_TOOL component
-set(CPACK_COMPONENTS_ALL APPIMAGE_CLI_TOOL)
+# make sure to only package APPIMAGE_INSTALLER component
+set(CPACK_COMPONENTS_ALL APPIMAGE_INSTALLER)
 
 # global options
 set(CPACK_PACKAGE_CONTACT "Alexis Lopez Zubieta")
-set(CPACK_PACKAGE_HOMEPAGE "https://github.com/azubieta/appimage-cli-tool")
+set(CPACK_PACKAGE_HOMEPAGE "https://github.com/azubieta/appimage-installer")
 set(CPACK_PACKAGE_DESCRIPTION_FILE "${CMAKE_SOURCE_DIR}/README.md")
 set(CPACK_RESOURCE_FILE_LICENSE "${CMAKE_SOURCE_DIR}/LICENSE")
 
 # versioning
 # it appears setting CPACK_DEBIAN_PACKAGE_VERSION doesn't work, hence setting CPACK_PACKAGE_VERSION
-set(CPACK_PACKAGE_VERSION ${APPIMAGE_CLI_TOOL_VERSION})
+set(CPACK_PACKAGE_VERSION ${APPIMAGE_INSTALLER_VERSION})
 
-# TODO: insert some useful description
-set(CPACK_COMPONENT_APPIMAGE_CLI_TOOL_PACKAGE_DESCRIPTION "AppImage User Tools")
+set(CPACK_COMPONENT_APPIMAGE_INSTALLER_PACKAGE_DESCRIPTION "AppImage installer tool")
 
 # find more suitable section for package
-set(CPACK_COMPONENT_APPIMAGE_CLI_TOOL_PACKAGE_SECTION misc)
+set(CPACK_COMPONENT_APPIMAGE_INSTALLER_PACKAGE_SECTION misc)

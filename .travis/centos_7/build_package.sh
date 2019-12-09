@@ -24,7 +24,7 @@ sudo docker run -v ${PWD}:/source -v ${PWD}/docker-build-release:/build ${DOCKER
             -DINSTALL_ATTICA=On\
             -DCMAKE_INSTALL_PREFIX=/usr \
             -DCMAKE_BUILD_TYPE=Release \
-            -DAPPIMAGE_CLI_TOOL_V_SUFFIX=\"-centos-7\" \
+            -DAPPIMAGE_INSTALLER_V_SUFFIX=\"-centos-7\" \
             -DCPACK_RPM_PACKAGE_REQUIRES='${CENTOS7_PACKAGE_REQUIRES}' \
             -DCPACK_RPM_PACKAGE_PROVIDES='${CENTOS7_PACKAGE_PROVIDES}' &&\
          make -j`nproc` &&\

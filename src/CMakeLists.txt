@@ -13,7 +13,6 @@ endif()
 
 add_subdirectory(core)
 add_subdirectory(cli)
-add_subdirectory(settings)
 
 # Install libappimage with the main executable
 if(INSTALL_LIBAPPIMAGE)

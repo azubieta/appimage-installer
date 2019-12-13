@@ -8,7 +8,7 @@
 #include "commands/ListCommand.h"
 #include "commands/RemoveCommand.h"
 #include "commands/UpdateCommand.h"
-#include "settings/Settings.h"
+#include "core/Settings.h"
 
 Command* createCommand(QStringList& args, Settings& settings);
 
@@ -21,13 +21,13 @@ int main(int argc, char** argv) {
 
     parser.addOption({"verbose", QCoreApplication::translate("cli-main", "Show debug messages")});
     parser.setApplicationDescription(
-        QCoreApplication::translate("cli-main",
-                                    "Command details\n"
-                                    "   search <query>              list applications available in the store\n"
-                                    "   install <STORE ID>          get the application with the given store id\n"
-                                    "   list                        list applications available on your system\n"
-                                    "   update <APP ID>             update if possible the given application\n"
-                                    "   remove <APP ID>             remove the application from your system"));
+            QCoreApplication::translate("cli-main",
+                                        "Command details\n"
+                                        "   search <query>              list applications available in the store\n"
+                                        "   install <STORE ID>          get the application with the given store id\n"
+                                        "   list                        list applications available on your system\n"
+                                        "   update <APP ID>             update if possible the given application\n"
+                                        "   remove <APP ID>             remove the application from your system"));
 
     parser.addVersionOption();
     parser.addHelpOption();
@@ -67,6 +67,8 @@ int main(int argc, char** argv) {
             case QtFatalMsg:
                 msgPrefix = "Fatal";
                 break;
+            default:
+                msgPrefix = "";
         }
 
         fprintf(stderr, "%s: %s", msgPrefix, localMsg.constData());

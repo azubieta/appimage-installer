@@ -9,12 +9,11 @@ set(
     commands/UpdateCommand.cpp
 )
 
-add_executable(app ${APP_SRCS} $<TARGET_OBJECTS:settings-common> $<TARGET_OBJECTS:core>)
+add_executable(app ${APP_SRCS} $<TARGET_OBJECTS:core>)
 
 configure_module(app)
 
 target_include_directories(app PUBLIC $<TARGET_PROPERTY:core,INTERFACE_INCLUDE_DIRECTORIES>)
-target_include_directories(app PUBLIC $<TARGET_PROPERTY:settings-common,INTERFACE_INCLUDE_DIRECTORIES>)
 
 target_link_libraries(
     app
@@ -27,7 +26,7 @@ target_link_libraries(
     PRIVATE AppImageUpdaterBridge
 )
 
-add_dependencies(app core settings-common)
+add_dependencies(app core)
 
 # Install
 install(

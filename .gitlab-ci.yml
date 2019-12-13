@@ -56,7 +56,7 @@ build:debian_buster_pkg:
   script:
     - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
     - make -j`nproc`
-    - cpack -G DEB -G DEB -R 1.0.0-debian-buster
+    - cpack -G DEB -G DEB -R 1.0.1-debian-buster
   artifacts:
     paths:
       - appimage-installer*.deb
@@ -79,7 +79,7 @@ build:ubuntu_bionic_pkg:
   script:
     - cmake -DINSTALL_LIBAPPIMAGE=On -DINSTALL_ATTICA=On -DCMAKE_INSTALL_PREFIX=/usr -DCMAKE_BUILD_TYPE=Release .
     - make -j`nproc`
-    - cpack -G DEB -G DEB -R 1.0.0-ubuntu-bionic
+    - cpack -G DEB -G DEB -R 1.0.1-ubuntu-bionic
   artifacts:
     expire_in: 1 year
     paths:

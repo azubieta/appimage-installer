@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.8)
 
-project(appimage-installer VERSION 1.0.0)
+project(appimage-installer VERSION 1.0.1)
 
 set(CMAKE_CXX_STANDARD 11)
 

@@ -64,4 +64,6 @@ private:
     void startFileDownload(const QUrl& downloadLink);
 
     int askWhichFileDownload(const QList<Attica::DownloadDescription>& compatibleDownloads);
+
+    int libappimage_install() const;
 };

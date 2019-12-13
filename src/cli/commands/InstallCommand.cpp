@@ -1,5 +1,6 @@
 // system
 #include <fstream>
+
 extern "C" {
 #include <sys/ioctl.h>
 }
@@ -94,7 +95,33 @@ void InstallCommand::installAppImage() {
     auto permissions = targetFile.permissions();
     targetFile.setPermissions(permissions | QFileDevice::ReadOwner | QFileDevice::ExeOwner);
 
-    // integrate with the desktop environment
+    // Control the installation order by using a tmp folder
+
+    QByteArray real_home = qgetenv("HOME");
+    QByteArray user = qgetenv("USER");
+    QByteArray tmp_home_path = "/tmp/appimage-installer-temp-home-" + user;
+
+    qputenv("HOME", tmp_home_path);
+
+    int res = libappimage_install();
+
+    qputenv("HOME", real_home);
+
+    QProcess::execute("cp -rf " + tmp_home_path + "/.cache/thumbnails " + real_home + "/.cache/");
+    QProcess::execute("cp -rf " + tmp_home_path + "/.local/share/icons " + real_home + "/.local/share/");
+    if (QFile::exists("/usr/bin/kbuildsycoca5"))
+        QProcess::execute("kbuildsycoca5 --noincremental ");
+
+    QProcess::execute("cp -rf " + tmp_home_path + "/.local/share/applications " + real_home + "/.local/share/");
+
+    QByteArray result_message = res == 0 ? "Installation completed\n" : "Installation failed\n";
+    showInlineMessage(result_message);
+
+    QProcess::execute("rm -rf " + tmp_home_path);
+    emit executionCompleted();
+}
+
+int InstallCommand::libappimage_install() const {// integrate with the desktop environment
     int res = appimage_register_in_system(targetPath.toStdString().c_str(), false);
 
     // add complementary actions
@@ -132,18 +159,10 @@ void InstallCommand::installAppImage() {
 
         std::ofstream ofstream(desktopFilePath);
         ofstream << entry;
+
+
     }
-
-
-    if (res == 0) {
-        showInlineMessage("Installation completed");
-    } else {
-        showInlineMessage("Installation failed");
-    }
-    out << "\n";
-
-
-    emit executionCompleted();
+    return res;
 }
 
 void InstallCommand::handleDownloadFailed(const QString& message) {
@@ -207,7 +226,7 @@ void InstallCommand::handleGetDownloadLinkJobFinished(Attica::BaseJob* job) {
             startFileDownload(download.link());
         }
     } else
-        emit executionFailed("Unable to resolve the application download link.");
+            emit executionFailed("Unable to resolve the application download link.");
 }
 
 int InstallCommand::askWhichFileDownload(const QList<Attica::DownloadDescription>& compatibleDownloads) {

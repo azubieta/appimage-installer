@@ -1,5 +1,5 @@
 add_library(
-    core OBJECT
+    core STATIC
     Download.cpp
     FileDownload.cpp
     AppsLibrary.cpp

@@ -1,9 +1,0 @@
-[Desktop Entry]
-Version=1.0
-Type=Application
-Name=appimage-installer-settings
-Comment=Configure AppImage providers
-TryExec=appimage-installer-settings
-Exec=appimage-installer-settings %F
-Icon=appimage_logo
-Categories=Utility;

@@ -1,5 +1,3 @@
-include(utils.cmake)
-
 # Find includes in corresponding build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 # Instruct CMake to run moc automatically when needed
@@ -13,7 +11,6 @@ endif()
 
 add_subdirectory(core)
 add_subdirectory(cli)
-add_subdirectory(settings)
 
 # Install libappimage with the main executable
 if(INSTALL_LIBAPPIMAGE)

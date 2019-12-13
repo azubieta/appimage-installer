@@ -9,15 +9,13 @@ set(
     commands/UpdateCommand.cpp
 )
 
-add_executable(app ${APP_SRCS} $<TARGET_OBJECTS:settings-common> $<TARGET_OBJECTS:core>)
-
-configure_module(app)
+add_executable(app ${APP_SRCS})
 
 target_include_directories(app PUBLIC $<TARGET_PROPERTY:core,INTERFACE_INCLUDE_DIRECTORIES>)
-target_include_directories(app PUBLIC $<TARGET_PROPERTY:settings-common,INTERFACE_INCLUDE_DIRECTORIES>)
 
 target_link_libraries(
     app
+    PRIVATE core
     PRIVATE Qt5::Core
     PRIVATE Qt5::Network
     PRIVATE KF5::Attica
@@ -27,7 +25,7 @@ target_link_libraries(
     PRIVATE AppImageUpdaterBridge
 )
 
-add_dependencies(app core settings-common)
+add_dependencies(app core)
 
 # Install
 install(

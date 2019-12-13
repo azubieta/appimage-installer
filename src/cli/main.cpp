@@ -8,7 +8,7 @@
 #include "commands/ListCommand.h"
 #include "commands/RemoveCommand.h"
 #include "commands/UpdateCommand.h"
-#include "core/Settings.h"
+#include "Settings.h"
 
 Command* createCommand(QStringList& args, Settings& settings);
 

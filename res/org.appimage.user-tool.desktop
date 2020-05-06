@@ -8,3 +8,4 @@ Exec=app %F
 Icon=appimage_logo
 Categories=Utility;
 Terminal=true
+NoDisplay=true

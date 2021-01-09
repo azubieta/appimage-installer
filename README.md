@@ -4,6 +4,8 @@
 
 This tool was rewritten in GO, please refer to https://github.com/AppImageCrafters/appimage-manager
 
+## Description
+
 High level commandline interface for applications management based on the AppImage packaging
 format. It uses [AppImageHub](http://www.appimagehub.com) as main source and allows to search, install, remove and
 update applications.
